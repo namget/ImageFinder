@@ -9,4 +9,8 @@ public class StoredImageFragment extends BaseFragment<FragmnetStoredImageBinding
     public StoredImageFragment() {
         super(R.layout.fragmnet_stored_image);
     }
+
+    public static StoredImageFragment getInstance() {
+        return new StoredImageFragment();
+    }
 }

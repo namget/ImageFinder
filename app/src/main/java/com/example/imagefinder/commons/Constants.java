@@ -1,6 +1,6 @@
 package com.example.imagefinder.commons;
 
-public class Contants {
+public class Constants {
 
     public static final int PAGE_SIZE = 20;
 }

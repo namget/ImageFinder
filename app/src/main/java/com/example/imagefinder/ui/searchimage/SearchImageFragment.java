@@ -8,4 +8,8 @@ public class SearchImageFragment extends BaseFragment<FragmnetSearchImageBinding
     public SearchImageFragment() {
         super(R.layout.fragmnet_search_image);
     }
+
+    public static SearchImageFragment getInstance() {
+        return new SearchImageFragment();
+    }
 }

@@ -11,7 +11,7 @@ import retrofit2.Retrofit;
 import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory;
 import retrofit2.converter.gson.GsonConverterFactory;
 
-import static com.example.imagefinder.commons.Contants.PAGE_SIZE;
+import static com.example.imagefinder.commons.Constants.PAGE_SIZE;
 
 public class RemoteDataSourceImpl implements RemoteDataSource {
 
