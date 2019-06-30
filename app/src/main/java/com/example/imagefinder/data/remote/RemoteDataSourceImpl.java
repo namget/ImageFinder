@@ -15,16 +15,17 @@ import static com.example.imagefinder.commons.Contants.PAGE_SIZE;
 
 public class RemoteDataSourceImpl implements RemoteDataSource {
 
+    private static RemoteDataSource INSTANCE;
+
     private final KakaoApi kakaoApi;
 
     private final String key = "KakaoAK 8cec532cb83faad0cae1d3943b48f0ca";
 
-    private static class LazyHolder {
-        private static final RemoteDataSourceImpl INSTANCE = new RemoteDataSourceImpl();
-    }
-
-    public static RemoteDataSourceImpl getInstance() {
-        return LazyHolder.INSTANCE;
+    public static RemoteDataSource getInstance() {
+        if (INSTANCE == null) {
+            INSTANCE = new RemoteDataSourceImpl();
+        }
+        return INSTANCE;
     }
 
     private RemoteDataSourceImpl() {
