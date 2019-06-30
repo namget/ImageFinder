@@ -1,10 +1,12 @@
 package com.example.imagefinder.data.remote.response;
 
 
+import androidx.annotation.NonNull;
 import com.google.gson.annotations.SerializedName;
 
 import java.util.Objects;
 
+@SuppressWarnings("unused")
 public class Meta {
 
     @SerializedName("is_end")
@@ -41,6 +43,7 @@ public class Meta {
         return Objects.hash(isEnd, pageableCount, totalCount);
     }
 
+    @NonNull
     @Override
     public String toString() {
         return "Meta{" +

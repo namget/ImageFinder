@@ -1,12 +1,14 @@
 
 package com.example.imagefinder.data.remote.response;
 
+import androidx.annotation.NonNull;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
 import java.util.List;
 import java.util.Objects;
 
+@SuppressWarnings("unused")
 public class ImageResponse {
 
     @Expose
@@ -14,10 +16,12 @@ public class ImageResponse {
     @Expose
     private Meta meta;
 
+    @NonNull
     public List<Document> getDocuments() {
         return documents;
     }
 
+    @NonNull
     public Meta getMeta() {
         return meta;
     }
@@ -36,6 +40,7 @@ public class ImageResponse {
         return Objects.hash(documents, meta);
     }
 
+    @NonNull
     @Override
     public String toString() {
         return "ImageResponse{" +
@@ -63,18 +68,22 @@ public class ImageResponse {
         @Expose
         private long width;
 
+        @NonNull
         public String getCollection() {
             return collection;
         }
 
+        @NonNull
         public String getDatetime() {
             return datetime;
         }
 
+        @NonNull
         public String getDisplaySitename() {
             return displaySitename;
         }
 
+        @NonNull
         public String getDocUrl() {
             return docUrl;
         }
@@ -83,10 +92,12 @@ public class ImageResponse {
             return height;
         }
 
+        @NonNull
         public String getImageUrl() {
             return imageUrl;
         }
 
+        @NonNull
         public String getThumbnailUrl() {
             return thumbnailUrl;
         }
@@ -115,6 +126,7 @@ public class ImageResponse {
             return Objects.hash(collection, datetime, displaySitename, docUrl, height, imageUrl, thumbnailUrl, width);
         }
 
+        @NonNull
         @Override
         public String toString() {
             return "Document{" +

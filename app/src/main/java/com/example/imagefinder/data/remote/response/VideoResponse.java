@@ -1,22 +1,26 @@
 
 package com.example.imagefinder.data.remote.response;
 
+import androidx.annotation.NonNull;
 import com.google.gson.annotations.SerializedName;
 
 import java.util.List;
 import java.util.Objects;
 
-public class VClipResponse {
+@SuppressWarnings("unused")
+public class VideoResponse {
 
     @SerializedName("documents")
     private List<Document> documents;
     @SerializedName("meta")
     private Meta meta;
 
+    @NonNull
     public List<Document> getDocuments() {
         return documents;
     }
 
+    @NonNull
     public Meta getMeta() {
         return meta;
     }
@@ -25,7 +29,7 @@ public class VClipResponse {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        VClipResponse that = (VClipResponse) o;
+        VideoResponse that = (VideoResponse) o;
         return Objects.equals(documents, that.documents) &&
                 Objects.equals(meta, that.meta);
     }
@@ -35,9 +39,10 @@ public class VClipResponse {
         return Objects.hash(documents, meta);
     }
 
+    @NonNull
     @Override
     public String toString() {
-        return "VClipResponse{" +
+        return "VideoResponse{" +
                 "documents=" + documents +
                 ", meta=" + meta +
                 '}';
@@ -58,10 +63,12 @@ public class VClipResponse {
         @SerializedName("url")
         private String url;
 
+        @NonNull
         public String getAuthor() {
             return author;
         }
 
+        @NonNull
         public String getDatetime() {
             return datetime;
         }
@@ -70,14 +77,17 @@ public class VClipResponse {
             return playTime;
         }
 
+        @NonNull
         public String getThumbnail() {
             return thumbnail;
         }
 
+        @NonNull
         public String getTitle() {
             return title;
         }
 
+        @NonNull
         public String getUrl() {
             return url;
         }
@@ -100,6 +110,7 @@ public class VClipResponse {
             return Objects.hash(author, datetime, playTime, thumbnail, title, url);
         }
 
+        @NonNull
         @Override
         public String toString() {
             return "Document{" +
