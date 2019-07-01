@@ -6,6 +6,7 @@ import androidx.lifecycle.MutableLiveData;
 import com.example.imagefinder.data.local.LocalDataSource;
 import com.example.imagefinder.data.model.Thumbnail;
 import com.example.imagefinder.ui.base.BaseViewModel;
+import io.reactivex.android.schedulers.AndroidSchedulers;
 
 import java.util.List;
 
@@ -24,5 +25,23 @@ public class StoredImageViewModel extends BaseViewModel {
     @NonNull
     public LiveData<List<Thumbnail>> getStoredImages() {
         return storedImages;
+    }
+
+    @SuppressWarnings("WeakerAccess")
+    public void updateImages() {
+        addDispoable(localDataSource.loadStoredThumbnails()
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(storedImages::setValue,
+                        Throwable::printStackTrace
+                )
+        );
+    }
+
+    public void deleteImages(int position) {
+        addDispoable(localDataSource.deleteStoredThumbnail(position)
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(storedImages::setValue,
+                        Throwable::printStackTrace)
+        );
     }
 }

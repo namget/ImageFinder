@@ -9,11 +9,11 @@ import java.util.Locale;
 
 public class DateUtils {
 
-    private DateUtils() {
-    }
-
     private static final SimpleDateFormat kakaoDateFormat =
             new SimpleDateFormat("yyyy-MM-dd'T'kk:mm:ss.SSSz", Locale.KOREA);
+
+    private DateUtils() {
+    }
 
     @NonNull
     public static Date parseKakaoDateToDate(@NonNull String kakaoDate) {

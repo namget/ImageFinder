@@ -8,14 +8,23 @@ import com.example.imagefinder.R;
 import com.example.imagefinder.adapter.ThumbnailAdapter;
 import com.example.imagefinder.databinding.FragmnetStoredImageBinding;
 import com.example.imagefinder.ui.base.BaseFragment;
+import com.example.imagefinder.ui.searchimage.SearchImageViewModel;
 
 public class StoredImageFragment extends BaseFragment<FragmnetStoredImageBinding> {
 
     @Nullable
     private StoredImageViewModel storedImageViewModel;
 
+    @Nullable
+    private SearchImageViewModel searchImageViewModel;
+
     public StoredImageFragment() {
         super(R.layout.fragmnet_stored_image);
+    }
+
+    @NonNull
+    public static StoredImageFragment getInstance() {
+        return new StoredImageFragment();
     }
 
     @Override
@@ -23,17 +32,31 @@ public class StoredImageFragment extends BaseFragment<FragmnetStoredImageBinding
         super.onViewCreated(view, savedInstanceState);
 
         storedImageViewModel = getFragmentScopeViewModel(StoredImageViewModel.class);
+        searchImageViewModel = getActivityScopeViewModel(SearchImageViewModel.class);
+
         binding.setVm(storedImageViewModel);
 
         setupRecyclerView();
+
+        observeViewModelData();
     }
 
     private void setupRecyclerView() {
         binding.rvStoredImage.setAdapter(new ThumbnailAdapter());
+
+        ThumbnailAdapter adapter = (ThumbnailAdapter) binding.rvStoredImage.getAdapter();
+
+        if (adapter != null && storedImageViewModel != null) {
+            adapter.setOnStoreButtonClickListener((item, position) ->
+                    storedImageViewModel.deleteImages(position)
+            );
+        }
     }
 
-    @NonNull
-    public static StoredImageFragment getInstance() {
-        return new StoredImageFragment();
+    private void observeViewModelData() {
+        if (searchImageViewModel != null && storedImageViewModel != null) {
+            searchImageViewModel.getIsLocalDataUpdate().observe(this, t ->
+                    storedImageViewModel.updateImages());
+        }
     }
 }

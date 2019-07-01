@@ -18,11 +18,17 @@ public class SearchImageFragment extends BaseFragment<FragmnetSearchImageBinding
         super(R.layout.fragmnet_search_image);
     }
 
+    @NonNull
+    public static SearchImageFragment getInstance() {
+        return new SearchImageFragment();
+    }
+
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        searchImageViewModel = getFragmentScopeViewModel(SearchImageViewModel.class);
+        searchImageViewModel = getActivityScopeViewModel(SearchImageViewModel.class);
+
         binding.setVm(searchImageViewModel);
 
         setupRecyclerView();
@@ -31,10 +37,13 @@ public class SearchImageFragment extends BaseFragment<FragmnetSearchImageBinding
 
     private void setupRecyclerView() {
         binding.rvSearchedImage.setAdapter(new ThumbnailAdapter());
-    }
 
-    @NonNull
-    public static SearchImageFragment getInstance() {
-        return new SearchImageFragment();
+        ThumbnailAdapter adapter = (ThumbnailAdapter) binding.rvSearchedImage.getAdapter();
+
+        if (adapter != null && searchImageViewModel != null) {
+            adapter.setOnStoreButtonClickListener((item, position) ->
+                    searchImageViewModel.storeImages(position)
+            );
+        }
     }
 }

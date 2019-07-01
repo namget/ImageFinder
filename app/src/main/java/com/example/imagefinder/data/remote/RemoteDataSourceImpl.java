@@ -21,13 +21,6 @@ public class RemoteDataSourceImpl implements RemoteDataSource {
 
     private final String key = "KakaoAK 8cec532cb83faad0cae1d3943b48f0ca";
 
-    public static RemoteDataSource getInstance() {
-        if (INSTANCE == null) {
-            INSTANCE = new RemoteDataSourceImpl();
-        }
-        return INSTANCE;
-    }
-
     private RemoteDataSourceImpl() {
         String URL = "https://dapi.kakao.com/";
         kakaoApi = new Retrofit.Builder()
@@ -50,6 +43,13 @@ public class RemoteDataSourceImpl implements RemoteDataSource {
                 )
                 .build()
                 .create(KakaoApi.class);
+    }
+
+    public static RemoteDataSource getInstance() {
+        if (INSTANCE == null) {
+            INSTANCE = new RemoteDataSourceImpl();
+        }
+        return INSTANCE;
     }
 
     @NonNull

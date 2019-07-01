@@ -1,4 +1,3 @@
-
 package com.example.imagefinder.data.remote.response;
 
 import androidx.annotation.NonNull;

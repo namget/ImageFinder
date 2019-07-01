@@ -3,16 +3,21 @@ package com.example.imagefinder.adapter;
 import android.view.LayoutInflater;
 import android.view.ViewGroup;
 import androidx.annotation.NonNull;
-import androidx.recyclerview.widget.DiffUtil;
-import androidx.recyclerview.widget.ListAdapter;
+import androidx.annotation.Nullable;
+import androidx.recyclerview.widget.RecyclerView;
 import com.example.imagefinder.R;
 import com.example.imagefinder.data.model.Thumbnail;
 
-public class ThumbnailAdapter extends ListAdapter<Thumbnail, ThumbnailViewHolder> {
+import java.util.ArrayList;
+import java.util.List;
 
-    public ThumbnailAdapter() {
-        super(DIFF_CALLBACK);
-    }
+public class ThumbnailAdapter extends RecyclerView.Adapter<ThumbnailViewHolder> {
+
+    @NonNull
+    private final List<Thumbnail> item = new ArrayList<>();
+
+    @Nullable
+    private OnStoreButtonClickListener onStoreButtonClickListener;
 
     @NonNull
     @Override
@@ -24,19 +29,31 @@ public class ThumbnailAdapter extends ListAdapter<Thumbnail, ThumbnailViewHolder
 
     @Override
     public void onBindViewHolder(@NonNull ThumbnailViewHolder holder, int position) {
-        holder.getBinding().setThumbnail(getItem(position));
+        holder.getBinding().setThumbnail(item.get(position));
+        holder.getBinding().ivStoreBtn.setOnClickListener(v -> {
+                    if (onStoreButtonClickListener != null) {
+                        onStoreButtonClickListener.onStoreButtonClick(item.get(position), position);
+                    }
+                }
+        );
+        holder.getBinding().executePendingBindings();
     }
 
-    private static final DiffUtil.ItemCallback<Thumbnail> DIFF_CALLBACK =
-            new DiffUtil.ItemCallback<Thumbnail>() {
-                @Override
-                public boolean areItemsTheSame(@NonNull Thumbnail oldItem, @NonNull Thumbnail newItem) {
-                    return false;
-                }
+    @Override
+    public int getItemCount() {
+        return item.size();
+    }
 
-                @Override
-                public boolean areContentsTheSame(@NonNull Thumbnail oldItem, @NonNull Thumbnail newItem) {
-                    return false;
-                }
-            };
+    public void updateItem(List<Thumbnail> item) {
+        this.item.clear();
+        this.item.addAll(item);
+    }
+
+    public void setOnStoreButtonClickListener(@NonNull OnStoreButtonClickListener onStoreButtonClickListener) {
+        this.onStoreButtonClickListener = onStoreButtonClickListener;
+    }
+
+    public interface OnStoreButtonClickListener {
+        void onStoreButtonClick(Thumbnail thumbnail, int position);
+    }
 }

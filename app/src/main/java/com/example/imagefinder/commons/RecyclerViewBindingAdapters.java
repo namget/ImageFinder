@@ -12,13 +12,12 @@ import java.util.List;
 public class RecyclerViewBindingAdapters {
 
     @BindingAdapter("item")
-    public static void setThumbnailItems(
-            @NonNull RecyclerView recyclerView,
-            @Nullable List<Thumbnail> items
-    ) {
+    public static void setThumbnailItems(@NonNull RecyclerView recyclerView,
+                                         @Nullable List<Thumbnail> items) {
         ThumbnailAdapter adapter = (ThumbnailAdapter) recyclerView.getAdapter();
         if (adapter != null && items != null) {
-            adapter.submitList(items);
+            adapter.updateItem(items);
+            adapter.notifyDataSetChanged();
         }
     }
 }

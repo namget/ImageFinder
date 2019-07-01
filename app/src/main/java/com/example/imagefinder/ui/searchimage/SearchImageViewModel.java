@@ -1,8 +1,10 @@
 package com.example.imagefinder.ui.searchimage;
 
+import android.util.Log;
 import androidx.annotation.NonNull;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
+import com.example.imagefinder.commons.SingleLiveEvent;
 import com.example.imagefinder.data.local.LocalDataSource;
 import com.example.imagefinder.data.model.Thumbnail;
 import com.example.imagefinder.data.remote.RemoteDataSource;
@@ -15,16 +17,15 @@ import java.util.List;
 public class SearchImageViewModel extends BaseViewModel {
 
     @NonNull
+    public final MutableLiveData<String> keyword = new MutableLiveData<>();
+    @NonNull
     private final RemoteDataSource remoteDataSource;
-
     @NonNull
     private final LocalDataSource localDataSource;
-
     @NonNull
     private final MutableLiveData<List<Thumbnail>> searchedImages = new MutableLiveData<>();
-
     @NonNull
-    public final MutableLiveData<String> keyword = new MutableLiveData<>();
+    private final SingleLiveEvent<Boolean> isLocalDataUpdate = new SingleLiveEvent<>();
 
     public SearchImageViewModel(
             @NonNull RemoteDataSource remoteDataSource,
@@ -39,13 +40,38 @@ public class SearchImageViewModel extends BaseViewModel {
         return searchedImages;
     }
 
+    @NonNull
+    public LiveData<Boolean> getIsLocalDataUpdate() {
+        return isLocalDataUpdate;
+    }
+
     @SuppressWarnings("ConstantConditions")
     public void loadImages() {
         if (TextUtils.isNotEmpty(keyword.getValue())) {
             addDispoable(remoteDataSource.getThumbnailsByAllSource(1, keyword.getValue())
                     .observeOn(AndroidSchedulers.mainThread())
-                    .subscribe(result -> searchedImages.setValue(result.getThumbnails()),
-                            Throwable::printStackTrace)
+                    .subscribe(result ->
+                                    searchedImages.setValue(result.getThumbnails()),
+                            Throwable::printStackTrace
+                    )
+            );
+        }
+    }
+
+
+    @SuppressWarnings("WeakerAccess")
+    public void storeImages(int position) {
+        List<Thumbnail> thumbnails = searchedImages.getValue();
+
+        if (thumbnails != null && position < thumbnails.size()) {
+            addDispoable(localDataSource.insertThumbnail(thumbnails.get(position))
+                    .observeOn(AndroidSchedulers.mainThread())
+                    .subscribe(() -> {
+                                Log.d("테스트", "들어감");
+                                isLocalDataUpdate.setValue(true);
+                            },
+                            Throwable::printStackTrace
+                    )
             );
         }
     }

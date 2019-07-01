@@ -3,8 +3,8 @@ package com.example.imagefinder.ui;
 import androidx.annotation.NonNull;
 import androidx.lifecycle.ViewModel;
 import androidx.lifecycle.ViewModelProvider;
+import com.example.imagefinder.data.local.FakeLocalDataSourceImpl;
 import com.example.imagefinder.data.local.LocalDataSource;
-import com.example.imagefinder.data.local.LocalDataSourceImpl;
 import com.example.imagefinder.data.remote.RemoteDataSource;
 import com.example.imagefinder.data.remote.RemoteDataSourceImpl;
 import com.example.imagefinder.ui.home.HomeViewModel;
@@ -21,19 +21,19 @@ public class ViewModelFactory extends ViewModelProvider.NewInstanceFactory {
     @NonNull
     private final LocalDataSource localDataSource;
 
-    public static ViewModelFactory getInstance() {
-        if (INSTANCE == null) {
-            INSTANCE = new ViewModelFactory(RemoteDataSourceImpl.getInstance(), LocalDataSourceImpl.getInstance());
-        }
-        return INSTANCE;
-    }
-
     private ViewModelFactory(
             @NonNull RemoteDataSource remoteDataSource,
             @NonNull LocalDataSource localDataSource
     ) {
         this.remoteDataSource = remoteDataSource;
         this.localDataSource = localDataSource;
+    }
+
+    public static ViewModelFactory getInstance() {
+        if (INSTANCE == null) {
+            INSTANCE = new ViewModelFactory(RemoteDataSourceImpl.getInstance(), FakeLocalDataSourceImpl.getInstance());
+        }
+        return INSTANCE;
     }
 
     @SuppressWarnings("unchecked")

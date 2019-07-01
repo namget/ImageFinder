@@ -38,4 +38,8 @@ public class BaseFragment<B extends ViewDataBinding> extends Fragment {
     protected <VM extends ViewModel> VM getFragmentScopeViewModel(@NonNull Class<VM> vmClass) {
         return ViewModelProviders.of(this, ViewModelFactory.getInstance()).get(vmClass);
     }
+
+    protected <VM extends ViewModel> VM getActivityScopeViewModel(@NonNull Class<VM> vmClass) {
+        return ViewModelProviders.of(requireActivity(), ViewModelFactory.getInstance()).get(vmClass);
+    }
 }
