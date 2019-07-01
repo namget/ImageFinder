@@ -15,6 +15,7 @@
 		
 		<ImageView
 			android:id="@+id/iv_thumbnail"
+			src="@{thumbnail.imageUri}"
 			android:layout_width="wrap_content"
 			android:layout_height="wrap_content"
 			app:layout_constraintEnd_toEndOf="parent"
