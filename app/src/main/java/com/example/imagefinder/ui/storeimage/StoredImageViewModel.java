@@ -14,7 +14,6 @@ public class StoredImageViewModel extends BaseViewModel {
 
     @NonNull
     private final LocalDataSource localDataSource;
-
     @NonNull
     private final MutableLiveData<List<Thumbnail>> storedImages = new MutableLiveData<>();
 

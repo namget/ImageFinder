@@ -1,6 +1,5 @@
 package com.example.imagefinder.ui.searchimage;
 
-import android.util.Log;
 import androidx.annotation.NonNull;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
@@ -66,10 +65,8 @@ public class SearchImageViewModel extends BaseViewModel {
         if (thumbnails != null && position < thumbnails.size()) {
             addDispoable(localDataSource.insertThumbnail(thumbnails.get(position))
                     .observeOn(AndroidSchedulers.mainThread())
-                    .subscribe(() -> {
-                                Log.d("테스트", "들어감");
-                                isLocalDataUpdate.setValue(true);
-                            },
+                    .subscribe(() ->
+                                    isLocalDataUpdate.setValue(true),
                             Throwable::printStackTrace
                     )
             );

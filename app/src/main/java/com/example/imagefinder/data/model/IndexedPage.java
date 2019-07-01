@@ -5,6 +5,7 @@ import com.example.imagefinder.data.remote.response.ImageResponse;
 import com.example.imagefinder.data.remote.response.VideoResponse;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
 
@@ -36,7 +37,8 @@ public class IndexedPage {
     public static IndexedPage of(
             int index,
             @NonNull ImageResponse imageResponse,
-            @NonNull VideoResponse videoResponse) {
+            @NonNull VideoResponse videoResponse
+    ) {
 
         final List<Thumbnail> thumbnails = new ArrayList<>();
 
@@ -47,6 +49,8 @@ public class IndexedPage {
         for (VideoResponse.Document videoDoc : videoResponse.getDocuments()) {
             thumbnails.add(Thumbnail.from(videoDoc));
         }
+
+        Collections.sort(thumbnails, (o1, o2) -> o2.getDateTime().compareTo(o1.getDateTime()));
 
         return new IndexedPage(
                 index,
@@ -64,6 +68,8 @@ public class IndexedPage {
             thumbnails.add(Thumbnail.from(imageDoc));
         }
 
+        Collections.sort(thumbnails, (o1, o2) -> o2.getDateTime().compareTo(o1.getDateTime()));
+
         return new IndexedPage(
                 index,
                 imageResponse.getMeta().getIsEnd(),
@@ -79,6 +85,8 @@ public class IndexedPage {
         for (VideoResponse.Document videoDoc : videoResponse.getDocuments()) {
             thumbnails.add(Thumbnail.from(videoDoc));
         }
+
+        Collections.sort(thumbnails, (o1, o2) -> o2.getDateTime().compareTo(o1.getDateTime()));
 
         return new IndexedPage(
                 index,

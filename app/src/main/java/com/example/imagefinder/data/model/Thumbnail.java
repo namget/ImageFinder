@@ -9,7 +9,7 @@ import com.example.imagefinder.utils.DateUtils;
 import java.util.Date;
 import java.util.Objects;
 
-@SuppressWarnings("unused")
+@SuppressWarnings({"unused", "WeakerAccess"})
 public class Thumbnail {
 
     @NonNull
@@ -37,7 +37,6 @@ public class Thumbnail {
     }
 
     @NonNull
-    @SuppressWarnings("WeakerAccess")
     public static Thumbnail from(@NonNull ImageResponse.Document document) {
         return new Thumbnail(document.getThumbnailUrl(),
                 DateUtils.parseKakaoDateToDate(document.getDatetime()),
@@ -46,7 +45,6 @@ public class Thumbnail {
     }
 
     @NonNull
-    @SuppressWarnings("WeakerAccess")
     public static Thumbnail from(@NonNull VideoResponse.Document document) {
         return new Thumbnail(document.getThumbnail(),
                 DateUtils.parseKakaoDateToDate(document.getDatetime()),
