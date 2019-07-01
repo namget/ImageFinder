@@ -4,8 +4,10 @@ import android.os.Bundle;
 import android.view.View;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.paging.PagedList;
 import com.example.imagefinder.R;
-import com.example.imagefinder.adapter.ThumbnailAdapter;
+import com.example.imagefinder.adapter.ThumbnailPagedListAdapter;
+import com.example.imagefinder.data.model.Thumbnail;
 import com.example.imagefinder.databinding.FragmnetSearchImageBinding;
 import com.example.imagefinder.ui.base.BaseFragment;
 
@@ -29,21 +31,41 @@ public class SearchImageFragment extends BaseFragment<FragmnetSearchImageBinding
 
         searchImageViewModel = getActivityScopeViewModel(SearchImageViewModel.class);
 
-        binding.setVm(searchImageViewModel);
+        getBinding().setVm(searchImageViewModel);
 
         setupRecyclerView();
 
+        registerEvent();
     }
 
     private void setupRecyclerView() {
-        binding.rvSearchedImage.setAdapter(new ThumbnailAdapter());
+        getBinding().rvSearchedImage.setAdapter(new ThumbnailPagedListAdapter((item, position) -> {
+                    if (searchImageViewModel != null) {
+                        searchImageViewModel.storeImages(item);
+                    }
+                })
+        );
+    }
 
-        ThumbnailAdapter adapter = (ThumbnailAdapter) binding.rvSearchedImage.getAdapter();
-
-        if (adapter != null && searchImageViewModel != null) {
-            adapter.setOnStoreButtonClickListener((item, position) ->
-                    searchImageViewModel.storeImages(position)
+    private void registerEvent() {
+        if (searchImageViewModel != null) {
+            getBinding().tvSearch.setOnClickListener(__ -> {
+                        if (searchImageViewModel.pagedListLiveData != null &&
+                                searchImageViewModel.pagedListLiveData.hasActiveObservers()) {
+                            searchImageViewModel.pagedListLiveData.removeObservers(this);
+                        }
+                        searchImageViewModel.loadImages();
+                        searchImageViewModel.pagedListLiveData.observe(this, this::nullCheckSubmitList);
+                    }
             );
+        }
+    }
+
+    private void nullCheckSubmitList(PagedList<Thumbnail> pagedList) {
+        ThumbnailPagedListAdapter adapter
+                = (ThumbnailPagedListAdapter) getBinding().rvSearchedImage.getAdapter();
+        if (adapter != null) {
+            adapter.submitList(pagedList);
         }
     }
 }

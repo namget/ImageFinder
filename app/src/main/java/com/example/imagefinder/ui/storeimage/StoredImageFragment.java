@@ -34,17 +34,17 @@ public class StoredImageFragment extends BaseFragment<FragmnetStoredImageBinding
         storedImageViewModel = getFragmentScopeViewModel(StoredImageViewModel.class);
         searchImageViewModel = getActivityScopeViewModel(SearchImageViewModel.class);
 
-        binding.setVm(storedImageViewModel);
+        getBinding().setVm(storedImageViewModel);
 
         setupRecyclerView();
 
-        observeViewModelData();
+        registerEvent();
     }
 
     private void setupRecyclerView() {
-        binding.rvStoredImage.setAdapter(new ThumbnailAdapter());
+        getBinding().rvStoredImage.setAdapter(new ThumbnailAdapter());
 
-        ThumbnailAdapter adapter = (ThumbnailAdapter) binding.rvStoredImage.getAdapter();
+        ThumbnailAdapter adapter = (ThumbnailAdapter) getBinding().rvStoredImage.getAdapter();
 
         if (adapter != null && storedImageViewModel != null) {
             adapter.setOnStoreButtonClickListener((item, position) ->
@@ -53,7 +53,7 @@ public class StoredImageFragment extends BaseFragment<FragmnetStoredImageBinding
         }
     }
 
-    private void observeViewModelData() {
+    private void registerEvent() {
         if (searchImageViewModel != null && storedImageViewModel != null) {
             searchImageViewModel.getIsLocalDataUpdate().observe(this, t ->
                     storedImageViewModel.updateImages());

@@ -28,7 +28,7 @@ public class StoredImageViewModel extends BaseViewModel {
 
     @SuppressWarnings("WeakerAccess")
     public void updateImages() {
-        addDispoable(localDataSource.loadStoredThumbnails()
+        addDisposable(localDataSource.loadStoredThumbnails()
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(storedImages::setValue,
                         Throwable::printStackTrace
@@ -36,8 +36,9 @@ public class StoredImageViewModel extends BaseViewModel {
         );
     }
 
+    @SuppressWarnings("WeakerAccess")
     public void deleteImages(int position) {
-        addDispoable(localDataSource.deleteStoredThumbnail(position)
+        addDisposable(localDataSource.deleteStoredThumbnail(position)
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(storedImages::setValue,
                         Throwable::printStackTrace)

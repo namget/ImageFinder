@@ -17,10 +17,14 @@ public class BaseFragment<B extends ViewDataBinding> extends Fragment {
 
     private final int layoutId;
 
-    protected B binding;
+    private B binding;
 
     public BaseFragment(int layoutId) {
         this.layoutId = layoutId;
+    }
+
+    public B getBinding() {
+        return binding;
     }
 
     @Nullable

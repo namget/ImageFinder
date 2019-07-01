@@ -22,6 +22,8 @@ buildscript {
         lifeCycleVersion = '1.1.1'
 
         glideVersion = '4.9.0'
+
+        pagingLibVersion = '2.1.0'
     }
 
     repositories {

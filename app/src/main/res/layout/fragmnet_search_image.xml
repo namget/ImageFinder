@@ -29,7 +29,6 @@
 			android:layout_width="0dp"
 			android:layout_height="48dp"
 			android:gravity="center"
-			android:onClick="@{() -> vm.loadImages()}"
 			android:text="@string/hint_search_keyword"
 			android:textSize="14sp"
 			app:layout_constraintEnd_toEndOf="parent"
@@ -38,7 +37,6 @@
 		
 		<androidx.recyclerview.widget.RecyclerView
 			android:id="@+id/rv_searched_image"
-			item="@{vm.searchedImages}"
 			android:layout_width="match_parent"
 			android:layout_height="0dp"
 			app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
@@ -46,6 +44,7 @@
 			app:layout_constraintEnd_toEndOf="parent"
 			app:layout_constraintStart_toStartOf="parent"
 			app:layout_constraintTop_toBottomOf="@id/et_search_keyword" />
+		<!--item="@{vm.searchedImages}"-->
 	
 	</androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

@@ -14,7 +14,11 @@ abstract public class BaseViewModel extends ViewModel {
         super.onCleared();
     }
 
-    protected void addDispoable(Disposable disposable) {
+    public CompositeDisposable getCompositeDisposable() {
+        return compositeDisposable;
+    }
+
+    protected void addDisposable(Disposable disposable) {
         compositeDisposable.add(disposable);
     }
 }
