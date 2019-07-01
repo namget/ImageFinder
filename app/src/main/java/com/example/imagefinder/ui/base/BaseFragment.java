@@ -23,7 +23,7 @@ public class BaseFragment<B extends ViewDataBinding> extends Fragment {
         this.layoutId = layoutId;
     }
 
-    public B getBinding() {
+    protected B getBinding() {
         return binding;
     }
 

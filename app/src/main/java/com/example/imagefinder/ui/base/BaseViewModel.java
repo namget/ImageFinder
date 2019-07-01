@@ -14,7 +14,7 @@ abstract public class BaseViewModel extends ViewModel {
         super.onCleared();
     }
 
-    public CompositeDisposable getCompositeDisposable() {
+    protected CompositeDisposable getCompositeDisposable() {
         return compositeDisposable;
     }
 

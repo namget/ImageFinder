@@ -7,9 +7,9 @@ import androidx.lifecycle.MutableLiveData;
 import androidx.paging.LivePagedListBuilder;
 import androidx.paging.PagedList;
 import com.example.imagefinder.commons.SingleLiveEvent;
-import com.example.imagefinder.data.ThumbnailDataSourceFactory;
 import com.example.imagefinder.data.local.LocalDataSource;
 import com.example.imagefinder.data.model.Thumbnail;
+import com.example.imagefinder.data.paging.ThumbnailDataSourceFactory;
 import com.example.imagefinder.data.remote.RemoteDataSource;
 import com.example.imagefinder.ui.base.BaseViewModel;
 import com.example.imagefinder.utils.TextUtils;
@@ -30,7 +30,7 @@ public class SearchImageViewModel extends BaseViewModel {
     @NonNull
     private final PagedList.Config config;
     @Nullable
-    public LiveData<PagedList<Thumbnail>> pagedListLiveData;
+    LiveData<PagedList<Thumbnail>> pagedListLiveData;
     @Nullable
     private ThumbnailDataSourceFactory thumbnailDataSourceFactory;
 
@@ -51,8 +51,8 @@ public class SearchImageViewModel extends BaseViewModel {
         return isLocalDataUpdate;
     }
 
-    @SuppressWarnings({"ConstantConditions", "WeakerAccess"})
-    public boolean loadImages() {
+    @SuppressWarnings({"ConstantConditions"})
+    boolean loadImages() {
         if (TextUtils.isNotEmpty(keyword.getValue())) {
             createPagedListLiveData(keyword.getValue());
             return true;
@@ -60,8 +60,7 @@ public class SearchImageViewModel extends BaseViewModel {
         return false;
     }
 
-    @SuppressWarnings("WeakerAccess")
-    public void storeImages(@NonNull Thumbnail thumbnail) {
+    void storeImages(@NonNull Thumbnail thumbnail) {
         addDisposable(localDataSource.insertThumbnail(thumbnail)
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(() ->

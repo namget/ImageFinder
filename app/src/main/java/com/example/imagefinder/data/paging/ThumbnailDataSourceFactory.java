@@ -1,4 +1,4 @@
-package com.example.imagefinder.data;
+package com.example.imagefinder.data.paging;
 
 import androidx.annotation.NonNull;
 import androidx.paging.DataSource;

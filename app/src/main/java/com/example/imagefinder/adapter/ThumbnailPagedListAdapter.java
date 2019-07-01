@@ -11,9 +11,6 @@ import com.example.imagefinder.data.model.Thumbnail;
 
 public class ThumbnailPagedListAdapter extends PagedListAdapter<Thumbnail, ThumbnailViewHolder> {
 
-    @Nullable
-    private OnStoreButtonClickListener onStoreButtonClickListener;
-
     private static final DiffUtil.ItemCallback<Thumbnail> DIFF_CALLBACK =
             new DiffUtil.ItemCallback<Thumbnail>() {
                 @Override
@@ -30,6 +27,8 @@ public class ThumbnailPagedListAdapter extends PagedListAdapter<Thumbnail, Thumb
                     return oldItem.equals(newItem);
                 }
             };
+    @Nullable
+    private OnStoreButtonClickListener onStoreButtonClickListener;
 
     public ThumbnailPagedListAdapter(@Nullable OnStoreButtonClickListener onStoreButtonClickListener) {
         super(DIFF_CALLBACK);
