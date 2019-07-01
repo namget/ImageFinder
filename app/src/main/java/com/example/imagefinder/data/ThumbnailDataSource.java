@@ -7,9 +7,11 @@ import com.example.imagefinder.data.remote.RemoteDataSource;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.CompositeDisposable;
 
+import static com.example.imagefinder.commons.Constants.INITIAL_INDEX;
+
+
 public class ThumbnailDataSource extends PageKeyedDataSource<Integer, Thumbnail> {
 
-    private static final int INITIAL_INDEX = 1;
     @NonNull
     private final String keyword;
     @NonNull

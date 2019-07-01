@@ -52,10 +52,12 @@ public class SearchImageViewModel extends BaseViewModel {
     }
 
     @SuppressWarnings({"ConstantConditions", "WeakerAccess"})
-    public void loadImages() {
+    public boolean loadImages() {
         if (TextUtils.isNotEmpty(keyword.getValue())) {
             createPagedListLiveData(keyword.getValue());
+            return true;
         }
+        return false;
     }
 
     @SuppressWarnings("WeakerAccess")

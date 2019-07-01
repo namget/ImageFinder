@@ -5,11 +5,14 @@ import android.view.View;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.paging.PagedList;
+import androidx.recyclerview.widget.StaggeredGridLayoutManager;
 import com.example.imagefinder.R;
 import com.example.imagefinder.adapter.ThumbnailPagedListAdapter;
 import com.example.imagefinder.data.model.Thumbnail;
 import com.example.imagefinder.databinding.FragmnetSearchImageBinding;
 import com.example.imagefinder.ui.base.BaseFragment;
+
+import static com.example.imagefinder.commons.Constants.STAGGERED_GRID_COUNT;
 
 public class SearchImageFragment extends BaseFragment<FragmnetSearchImageBinding> {
 
@@ -39,11 +42,16 @@ public class SearchImageFragment extends BaseFragment<FragmnetSearchImageBinding
     }
 
     private void setupRecyclerView() {
-        getBinding().rvSearchedImage.setAdapter(new ThumbnailPagedListAdapter((item, position) -> {
+        getBinding().rvSearchedImage.setAdapter(
+                new ThumbnailPagedListAdapter((item, position) -> {
                     if (searchImageViewModel != null) {
                         searchImageViewModel.storeImages(item);
                     }
                 })
+        );
+
+        getBinding().rvSearchedImage.setLayoutManager(
+                new StaggeredGridLayoutManager(STAGGERED_GRID_COUNT, StaggeredGridLayoutManager.VERTICAL)
         );
     }
 
@@ -54,14 +62,16 @@ public class SearchImageFragment extends BaseFragment<FragmnetSearchImageBinding
                                 searchImageViewModel.pagedListLiveData.hasActiveObservers()) {
                             searchImageViewModel.pagedListLiveData.removeObservers(this);
                         }
-                        searchImageViewModel.loadImages();
-                        searchImageViewModel.pagedListLiveData.observe(this, this::nullCheckSubmitList);
+
+                        if (searchImageViewModel.loadImages()) {
+                            searchImageViewModel.pagedListLiveData.observe(this, this::nullCheckSubmitList);
+                        }
                     }
             );
         }
     }
 
-    private void nullCheckSubmitList(PagedList<Thumbnail> pagedList) {
+    private void nullCheckSubmitList(@NonNull PagedList<Thumbnail> pagedList) {
         ThumbnailPagedListAdapter adapter
                 = (ThumbnailPagedListAdapter) getBinding().rvSearchedImage.getAdapter();
         if (adapter != null) {

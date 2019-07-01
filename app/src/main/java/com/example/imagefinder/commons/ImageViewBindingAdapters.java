@@ -17,6 +17,7 @@ public class ImageViewBindingAdapters {
         if (TextUtils.isNotEmpty(uri)) {
             Glide.with(imageView)
                     .load(uri)
+                    .override(imageView.getWidth(), imageView.getHeight())
                     .into(imageView);
         }
     }
