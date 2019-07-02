@@ -5,14 +5,14 @@ import android.view.View;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.paging.PagedList;
-import androidx.recyclerview.widget.StaggeredGridLayoutManager;
+import androidx.recyclerview.widget.GridLayoutManager;
 import com.example.imagefinder.R;
 import com.example.imagefinder.adapter.ThumbnailPagedListAdapter;
 import com.example.imagefinder.data.model.Thumbnail;
 import com.example.imagefinder.databinding.FragmnetSearchImageBinding;
 import com.example.imagefinder.ui.base.BaseFragment;
 
-import static com.example.imagefinder.commons.Constants.STAGGERED_GRID_COUNT;
+import static com.example.imagefinder.commons.Constants.GRID_SPAN_COUNT;
 
 public class SearchImageFragment extends BaseFragment<FragmnetSearchImageBinding> {
 
@@ -56,9 +56,7 @@ public class SearchImageFragment extends BaseFragment<FragmnetSearchImageBinding
                 })
         );
 
-        getBinding().rvSearchedImage.setLayoutManager(
-                new StaggeredGridLayoutManager(STAGGERED_GRID_COUNT, StaggeredGridLayoutManager.VERTICAL)
-        );
+        getBinding().rvSearchedImage.setLayoutManager(new GridLayoutManager(getContext(), GRID_SPAN_COUNT));
     }
 
     private void nullCheckSubmitList(@NonNull PagedList<Thumbnail> pagedList) {

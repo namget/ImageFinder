@@ -30,12 +30,6 @@ public class ThumbnailAdapter extends RecyclerView.Adapter<ThumbnailViewHolder> 
     @Override
     public void onBindViewHolder(@NonNull ThumbnailViewHolder holder, int position) {
         holder.getBinding().setThumbnail(item.get(position));
-        holder.getBinding().ivStoreBtn.setOnClickListener(v -> {
-                    if (onStoreButtonClickListener != null) {
-                        onStoreButtonClickListener.onStoreButtonClick(item.get(position), position);
-                    }
-                }
-        );
         holder.getBinding().executePendingBindings();
     }
 
