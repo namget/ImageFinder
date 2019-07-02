@@ -3,6 +3,8 @@
 	<color name="primary">@color/colorLightBlue300</color>
 	<color name="primaryDark">@color/colorLightBlue700</color>
 	
+	<color name="transparent">@android:color/transparent</color>
+	
 	<color name="backgroundWhite">@color/colorWhite</color>
 	<color name="backgroundBlack">@color/colorBlack</color>
 	<color name="backgroundLight">@color/colorGray300</color>
