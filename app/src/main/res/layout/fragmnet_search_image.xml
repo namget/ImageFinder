@@ -29,6 +29,7 @@
 			android:layout_width="0dp"
 			android:layout_height="48dp"
 			android:gravity="center"
+			android:onClick="@{() -> vm.loadImages()}"
 			android:text="@string/hint_search_keyword"
 			android:textSize="14sp"
 			app:layout_constraintEnd_toEndOf="parent"

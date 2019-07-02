@@ -2,10 +2,11 @@ package com.example.imagefinder.data.paging;
 
 import androidx.annotation.NonNull;
 import androidx.paging.PageKeyedDataSource;
+import com.example.imagefinder.commons.SingleLiveEvent;
 import com.example.imagefinder.data.model.Thumbnail;
 import com.example.imagefinder.data.remote.RemoteDataSource;
-import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.CompositeDisposable;
+import io.reactivex.disposables.Disposable;
 
 import static com.example.imagefinder.commons.Constants.INITIAL_INDEX;
 
@@ -18,15 +19,23 @@ public class ThumbnailDataSource extends PageKeyedDataSource<Integer, Thumbnail>
     private final CompositeDisposable compositeDisposable;
     @NonNull
     private final RemoteDataSource remoteDataSource;
+    @NonNull
+    private final SingleLiveEvent<Boolean> isLoading;
+    @NonNull
+    private final SingleLiveEvent<Boolean> isError;
 
     ThumbnailDataSource(
             @NonNull String keyword,
             @NonNull CompositeDisposable compositeDisposable,
-            @NonNull RemoteDataSource remoteDataSource
+            @NonNull RemoteDataSource remoteDataSource,
+            @NonNull SingleLiveEvent<Boolean> isLoading,
+            @NonNull SingleLiveEvent<Boolean> isError
     ) {
         this.keyword = keyword;
         this.compositeDisposable = compositeDisposable;
         this.remoteDataSource = remoteDataSource;
+        this.isLoading = isLoading;
+        this.isError = isError;
     }
 
 
@@ -35,12 +44,16 @@ public class ThumbnailDataSource extends PageKeyedDataSource<Integer, Thumbnail>
             @NonNull LoadInitialParams<Integer> params,
             @NonNull LoadInitialCallback<Integer, Thumbnail> callback
     ) {
-        compositeDisposable.add(remoteDataSource
-                .getThumbnailsByAllSource(INITIAL_INDEX, keyword)
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(result ->
-                                callback.onResult(result.getThumbnails(), INITIAL_INDEX, INITIAL_INDEX + 1),
-                        Throwable::printStackTrace
+        isLoading.postValue(true);
+        addDisposable(remoteDataSource.getThumbnailsByAllSource(INITIAL_INDEX, keyword)
+                .subscribe(result -> {
+                            isLoading.postValue(false);
+                            callback.onResult(result, INITIAL_INDEX, INITIAL_INDEX + 1);
+                        },
+                        error -> {
+                            isLoading.postValue(false);
+                            isError.postValue(true);
+                        }
                 )
         );
     }
@@ -57,13 +70,15 @@ public class ThumbnailDataSource extends PageKeyedDataSource<Integer, Thumbnail>
             @NonNull LoadParams<Integer> params,
             @NonNull LoadCallback<Integer, Thumbnail> callback
     ) {
-        compositeDisposable.add(remoteDataSource
-                .getThumbnailsByAllSource(params.key + 1, keyword)
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(result ->
-                                callback.onResult(result.getThumbnails(), params.key + 1),
-                        Throwable::printStackTrace
+        int nextKey = params.key + 1;
+        addDisposable(remoteDataSource.getThumbnailsByAllSource(nextKey, keyword)
+                .subscribe(result -> callback.onResult(result, nextKey),
+                        error -> isError.postValue(true)
                 )
         );
+    }
+
+    private void addDisposable(Disposable disposable) {
+        compositeDisposable.add(disposable);
     }
 }

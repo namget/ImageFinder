@@ -41,6 +41,12 @@ public class SearchImageFragment extends BaseFragment<FragmnetSearchImageBinding
         registerEvent();
     }
 
+    private void registerEvent() {
+        if (searchImageViewModel != null) {
+            searchImageViewModel.pagedListLiveData.observe(this, this::nullCheckSubmitList);
+        }
+    }
+
     private void setupRecyclerView() {
         getBinding().rvSearchedImage.setAdapter(
                 new ThumbnailPagedListAdapter((item, position) -> {
@@ -53,22 +59,6 @@ public class SearchImageFragment extends BaseFragment<FragmnetSearchImageBinding
         getBinding().rvSearchedImage.setLayoutManager(
                 new StaggeredGridLayoutManager(STAGGERED_GRID_COUNT, StaggeredGridLayoutManager.VERTICAL)
         );
-    }
-
-    private void registerEvent() {
-        if (searchImageViewModel != null) {
-            getBinding().tvSearch.setOnClickListener(__ -> {
-                        if (searchImageViewModel.pagedListLiveData != null &&
-                                searchImageViewModel.pagedListLiveData.hasActiveObservers()) {
-                            searchImageViewModel.pagedListLiveData.removeObservers(this);
-                        }
-
-                        if (searchImageViewModel.loadImages()) {
-                            searchImageViewModel.pagedListLiveData.observe(this, this::nullCheckSubmitList);
-                        }
-                    }
-            );
-        }
     }
 
     private void nullCheckSubmitList(@NonNull PagedList<Thumbnail> pagedList) {

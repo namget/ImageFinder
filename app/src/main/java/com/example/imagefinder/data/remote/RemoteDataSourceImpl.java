@@ -1,8 +1,8 @@
 package com.example.imagefinder.data.remote;
 
 import androidx.annotation.NonNull;
-import com.example.imagefinder.data.model.IndexedPage;
-import io.reactivex.Observable;
+import com.example.imagefinder.data.model.Thumbnail;
+import com.example.imagefinder.utils.TextUtils;
 import io.reactivex.Single;
 import io.reactivex.schedulers.Schedulers;
 import okhttp3.OkHttpClient;
@@ -11,7 +11,10 @@ import retrofit2.Retrofit;
 import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory;
 import retrofit2.converter.gson.GsonConverterFactory;
 
-import static com.example.imagefinder.commons.Constants.PAGE_SIZE;
+import java.util.ArrayList;
+import java.util.List;
+
+import static com.example.imagefinder.commons.Constants.*;
 
 public class RemoteDataSourceImpl implements RemoteDataSource {
 
@@ -54,29 +57,42 @@ public class RemoteDataSourceImpl implements RemoteDataSource {
 
     @NonNull
     @Override
-    public Single<IndexedPage> getThumbnailsByAllSource(int index, @NonNull String keyword) {
-        return Observable.zip(
-                kakaoApi.getImages(keyword, index, PAGE_SIZE).toObservable(),
-                kakaoApi.getVideos(keyword, index, PAGE_SIZE).toObservable(),
-                (imageResponse, videoResponse) -> IndexedPage.of(index, imageResponse, videoResponse)
-        )
-                .subscribeOn(Schedulers.io())
-                .firstOrError();
+    public Single<List<Thumbnail>> getThumbnailsByAllSource(int index, @NonNull String keyword) {
+        if (TextUtils.isNotEmpty(keyword)) {
+            return Single.zip(
+                    getThumbnailsByImageSource(index, keyword),
+                    getThumbnailsByVideoSource(index, keyword),
+                    (thumbnailsFromImageSource, thumbnailsFromVideoSource) -> {
+                        List<Thumbnail> thumbnails = new ArrayList<>(thumbnailsFromImageSource);
+                        thumbnails.addAll(thumbnailsFromVideoSource);
+                        return thumbnails;
+                    })
+                    .map(Thumbnail::sortByDateTime)
+                    .subscribeOn(Schedulers.io());
+        } else {
+            return Single.just(new ArrayList<>());
+        }
     }
 
     @NonNull
-    @Override
-    public Single<IndexedPage> getThumbnailByImageSource(int index, @NonNull String keyword) {
-        return kakaoApi.getImages(keyword, index, PAGE_SIZE)
-                .subscribeOn(Schedulers.io())
-                .map(imageResponse -> IndexedPage.from(index, imageResponse));
+    private Single<List<Thumbnail>> getThumbnailsByImageSource(int index, @NonNull String keyword) {
+        if (index <= IMAGE_SOURCE_MAX_INDEX) {
+            return kakaoApi.getImages(keyword, index, PAGE_SIZE)
+                    .subscribeOn(Schedulers.io())
+                    .map(Thumbnail::toListByResponse);
+        } else {
+            return Single.just(new ArrayList<>());
+        }
     }
 
     @NonNull
-    @Override
-    public Single<IndexedPage> getThumbnailByVideoSource(int index, @NonNull String keyword) {
-        return kakaoApi.getVideos(keyword, index, PAGE_SIZE)
-                .subscribeOn(Schedulers.io())
-                .map(videoResponse -> IndexedPage.from(index, videoResponse));
+    private Single<List<Thumbnail>> getThumbnailsByVideoSource(int index, @NonNull String keyword) {
+        if (index <= VIDEO_SOURCE_MAX_INDEX) {
+            return kakaoApi.getVideos(keyword, index, PAGE_SIZE)
+                    .subscribeOn(Schedulers.io())
+                    .map(Thumbnail::toListByResponse);
+        } else {
+            return Single.just(new ArrayList<>());
+        }
     }
 }

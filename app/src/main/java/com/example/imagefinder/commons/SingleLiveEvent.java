@@ -19,6 +19,14 @@ public class SingleLiveEvent<T> extends MutableLiveData<T> {
     }
 
     @Override
+    public void postValue(T value) {
+        synchronized (pending) {
+            pending.set(true);
+        }
+        super.postValue(value);
+    }
+
+    @Override
     public void observe(@NonNull LifecycleOwner owner, @NonNull Observer<? super T> observer) {
         super.observe(owner, t -> {
                     if (pending.compareAndSet(true, false)) {

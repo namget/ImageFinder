@@ -8,6 +8,7 @@ import androidx.paging.PagedListAdapter;
 import androidx.recyclerview.widget.DiffUtil;
 import com.example.imagefinder.R;
 import com.example.imagefinder.data.model.Thumbnail;
+import com.example.imagefinder.utils.TextUtils;
 
 public class ThumbnailPagedListAdapter extends PagedListAdapter<Thumbnail, ThumbnailViewHolder> {
 
@@ -16,9 +17,7 @@ public class ThumbnailPagedListAdapter extends PagedListAdapter<Thumbnail, Thumb
                 @Override
                 public boolean areItemsTheSame(@NonNull Thumbnail oldItem,
                                                @NonNull Thumbnail newItem) {
-                    // image api page 버그 때문에 무조건 false 로 해야함
-                    //return TextUtils.isEquals(oldItem.getImageUri(), newItem.getImageUri());
-                    return false;
+                    return TextUtils.isEquals(oldItem.getImageUri(), newItem.getImageUri());
                 }
 
                 @Override
@@ -46,12 +45,6 @@ public class ThumbnailPagedListAdapter extends PagedListAdapter<Thumbnail, Thumb
     @Override
     public void onBindViewHolder(@NonNull ThumbnailViewHolder holder, int position) {
         holder.getBinding().setThumbnail(getItem(position));
-        holder.getBinding().ivStoreBtn.setOnClickListener(__ -> {
-                    if (onStoreButtonClickListener != null) {
-                        onStoreButtonClickListener.onStoreButtonClick(getItem(position), position);
-                    }
-                }
-        );
         holder.getBinding().executePendingBindings();
     }
 

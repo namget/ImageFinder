@@ -6,8 +6,7 @@ import com.example.imagefinder.data.remote.response.VideoResponse;
 import com.example.imagefinder.enums.ThumbnailSource;
 import com.example.imagefinder.utils.DateUtils;
 
-import java.util.Date;
-import java.util.Objects;
+import java.util.*;
 
 @SuppressWarnings({"unused", "WeakerAccess"})
 public class Thumbnail {
@@ -50,6 +49,30 @@ public class Thumbnail {
                 DateUtils.parseKakaoDateToDate(document.getDatetime()),
                 document.getAuthor() + ", " + document.getTitle(),
                 ThumbnailSource.VIDEO_THUMBNAIL);
+    }
+
+    @NonNull
+    public static List<Thumbnail> toListByResponse(ImageResponse response) {
+        List<Thumbnail> thumbnails = new ArrayList<>();
+        for (ImageResponse.Document document : response.getDocuments()) {
+            thumbnails.add(Thumbnail.from(document));
+        }
+        return thumbnails;
+    }
+
+    @NonNull
+    public static List<Thumbnail> toListByResponse(VideoResponse response) {
+        List<Thumbnail> thumbnails = new ArrayList<>();
+        for (VideoResponse.Document document : response.getDocuments()) {
+            thumbnails.add(Thumbnail.from(document));
+        }
+        return thumbnails;
+    }
+
+    public static List<Thumbnail> sortByDateTime(List<Thumbnail> thumbnails) {
+        List<Thumbnail> result = new ArrayList<>(thumbnails);
+        Collections.sort(result, (o1, o2) -> o2.getDateTime().compareTo(o1.getDateTime()));
+        return result;
     }
 
     @NonNull

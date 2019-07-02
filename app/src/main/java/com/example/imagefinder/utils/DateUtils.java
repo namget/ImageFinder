@@ -18,7 +18,9 @@ public class DateUtils {
     @NonNull
     public static Date parseKakaoDateToDate(@NonNull String kakaoDate) {
         try {
-            return kakaoDateFormat.parse(kakaoDate);
+            synchronized (kakaoDateFormat) {
+                return kakaoDateFormat.parse(kakaoDate);
+            }
         } catch (ParseException e) {
             e.printStackTrace();
             throw new IllegalArgumentException("Invalid kakaoDate parameter: " + kakaoDate);

@@ -1,7 +1,6 @@
 package com.example.imagefinder.ui.searchimage;
 
 import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.paging.LivePagedListBuilder;
@@ -12,7 +11,6 @@ import com.example.imagefinder.data.model.Thumbnail;
 import com.example.imagefinder.data.paging.ThumbnailDataSourceFactory;
 import com.example.imagefinder.data.remote.RemoteDataSource;
 import com.example.imagefinder.ui.base.BaseViewModel;
-import com.example.imagefinder.utils.TextUtils;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 
 import static com.example.imagefinder.commons.Constants.PAGE_SIZE;
@@ -22,17 +20,19 @@ public class SearchImageViewModel extends BaseViewModel {
     @NonNull
     public final MutableLiveData<String> keyword = new MutableLiveData<>();
     @NonNull
+    final LiveData<PagedList<Thumbnail>> pagedListLiveData;
+    @NonNull
     private final RemoteDataSource remoteDataSource;
     @NonNull
     private final LocalDataSource localDataSource;
     @NonNull
     private final SingleLiveEvent<Boolean> isLocalDataUpdate = new SingleLiveEvent<>();
     @NonNull
-    private final PagedList.Config config;
-    @Nullable
-    LiveData<PagedList<Thumbnail>> pagedListLiveData;
-    @Nullable
-    private ThumbnailDataSourceFactory thumbnailDataSourceFactory;
+    private final ThumbnailDataSourceFactory thumbnailDataSourceFactory;
+    @NonNull
+    private final SingleLiveEvent<Boolean> isLoading = new SingleLiveEvent<>();
+    @NonNull
+    private final SingleLiveEvent<Boolean> isError = new SingleLiveEvent<>();
 
     public SearchImageViewModel(
             @NonNull RemoteDataSource remoteDataSource,
@@ -40,10 +40,34 @@ public class SearchImageViewModel extends BaseViewModel {
     ) {
         this.remoteDataSource = remoteDataSource;
         this.localDataSource = localDataSource;
-        config = new PagedList.Config.Builder()
+
+        PagedList.Config config = new PagedList.Config.Builder()
                 .setPageSize(PAGE_SIZE)
                 .setInitialLoadSizeHint(PAGE_SIZE * 2)
                 .build();
+
+        thumbnailDataSourceFactory = new ThumbnailDataSourceFactory(
+                "",
+                getCompositeDisposable(),
+                remoteDataSource,
+                isLoading,
+                isError
+        );
+
+        pagedListLiveData = new LivePagedListBuilder<>(
+                thumbnailDataSourceFactory,
+                config
+        ).build();
+    }
+
+    @NonNull
+    public LiveData<Boolean> getIsLoading() {
+        return isLoading;
+    }
+
+    @NonNull
+    public LiveData<Boolean> getIsError() {
+        return isError;
     }
 
     @NonNull
@@ -51,35 +75,19 @@ public class SearchImageViewModel extends BaseViewModel {
         return isLocalDataUpdate;
     }
 
-    @SuppressWarnings({"ConstantConditions"})
-    boolean loadImages() {
-        if (TextUtils.isNotEmpty(keyword.getValue())) {
-            createPagedListLiveData(keyword.getValue());
-            return true;
+    public void loadImages() {
+        if (pagedListLiveData.getValue() != null && keyword.getValue() != null) {
+            thumbnailDataSourceFactory.setKeyword(keyword.getValue());
+            pagedListLiveData.getValue().getDataSource().invalidate();
         }
-        return false;
     }
 
     void storeImages(@NonNull Thumbnail thumbnail) {
         addDisposable(localDataSource.insertThumbnail(thumbnail)
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(() ->
-                                isLocalDataUpdate.setValue(true),
+                .subscribe(() -> isLocalDataUpdate.setValue(true),
                         Throwable::printStackTrace
                 )
         );
-    }
-
-    private void createPagedListLiveData(@NonNull String keyword) {
-        if (thumbnailDataSourceFactory == null) {
-            thumbnailDataSourceFactory = new ThumbnailDataSourceFactory(
-                    keyword,
-                    getCompositeDisposable(),
-                    remoteDataSource
-            );
-        } else {
-            thumbnailDataSourceFactory.setKeyword(keyword);
-        }
-        pagedListLiveData = new LivePagedListBuilder<>(thumbnailDataSourceFactory, config).build();
     }
 }
