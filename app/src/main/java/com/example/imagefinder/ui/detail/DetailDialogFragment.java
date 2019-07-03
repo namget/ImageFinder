@@ -1,7 +1,9 @@
 package com.example.imagefinder.ui.detail;
 
+import android.app.Dialog;
 import android.os.Bundle;
 import android.view.View;
+import android.view.Window;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.DialogFragment;
@@ -17,14 +19,13 @@ import static com.example.imagefinder.commons.Constants.THUMBNAIL_ARGUMENT_KEY;
 
 public class DetailDialogFragment extends BaseDialogFragment<DialogFragmnetDetailBinding> {
 
-    public DetailDialogFragment() {
-        super(R.layout.dialog_fragmnet_detail);
-    }
-
     @Nullable
     private Thumbnail thumbnail;
     @Nullable
     private DetailViewModel detailViewModel;
+    public DetailDialogFragment() {
+        super(R.layout.dialog_fragmnet_detail);
+    }
 
     @SuppressWarnings("WeakerAccess")
     public static DetailDialogFragment newInstance(@NonNull Thumbnail thumbnail) {
@@ -33,6 +34,18 @@ public class DetailDialogFragment extends BaseDialogFragment<DialogFragmnetDetai
         bundle.putParcelable(THUMBNAIL_ARGUMENT_KEY, thumbnail);
         fragment.setArguments(bundle);
         return fragment;
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+        Dialog dialog = getDialog();
+        if (dialog != null) {
+            Window window = dialog.getWindow();
+            if (window != null) {
+                window.getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR);
+            }
+        }
     }
 
     @Override

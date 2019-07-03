@@ -26,13 +26,13 @@ public class DetailViewModel extends BaseViewModel {
         this.localDataSource = localDataSource;
     }
 
-    public void setThumbnail(Thumbnail thumbnail) {
-        this.thumbnail.setValue(thumbnail);
-    }
-
     @NonNull
     public LiveData<Thumbnail> getThumbnail() {
         return thumbnail;
+    }
+
+    public void setThumbnail(Thumbnail thumbnail) {
+        this.thumbnail.setValue(thumbnail);
     }
 
     @NonNull

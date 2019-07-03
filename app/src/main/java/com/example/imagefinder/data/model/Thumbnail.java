@@ -13,15 +13,23 @@ import java.util.*;
 @SuppressWarnings({"unused", "WeakerAccess"})
 public class Thumbnail implements Parcelable {
 
+    public static final Creator<Thumbnail> CREATOR = new Creator<Thumbnail>() {
+        @Override
+        public Thumbnail createFromParcel(Parcel source) {
+            return new Thumbnail(source);
+        }
+
+        @Override
+        public Thumbnail[] newArray(int size) {
+            return new Thumbnail[size];
+        }
+    };
     @NonNull
     private final String imageUri;
-
     @NonNull
     private final Date dateTime;
-
     @NonNull
     private final String content;
-
     @NonNull
     private final ThumbnailSource source;
 
@@ -35,6 +43,14 @@ public class Thumbnail implements Parcelable {
         this.dateTime = dateTime;
         this.content = content;
         this.source = source;
+    }
+
+    protected Thumbnail(Parcel in) {
+        this.imageUri = Objects.requireNonNull(in.readString());
+        this.dateTime = new Date(in.readLong());
+        this.content = Objects.requireNonNull(in.readString());
+        int tmpSource = in.readInt();
+        this.source = ThumbnailSource.values()[in.readInt()];
     }
 
     @NonNull
@@ -136,24 +152,4 @@ public class Thumbnail implements Parcelable {
         dest.writeString(this.content);
         dest.writeInt(this.source.ordinal());
     }
-
-    protected Thumbnail(Parcel in) {
-        this.imageUri = Objects.requireNonNull(in.readString());
-        this.dateTime = new Date(in.readLong());
-        this.content = Objects.requireNonNull(in.readString());
-        int tmpSource = in.readInt();
-        this.source = ThumbnailSource.values()[in.readInt()];
-    }
-
-    public static final Creator<Thumbnail> CREATOR = new Creator<Thumbnail>() {
-        @Override
-        public Thumbnail createFromParcel(Parcel source) {
-            return new Thumbnail(source);
-        }
-
-        @Override
-        public Thumbnail[] newArray(int size) {
-            return new Thumbnail[size];
-        }
-    };
 }

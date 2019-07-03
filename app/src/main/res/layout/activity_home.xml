@@ -13,12 +13,14 @@
 	<androidx.constraintlayout.widget.ConstraintLayout
 		android:layout_width="match_parent"
 		android:layout_height="match_parent"
+		android:background="@color/backgroundWhite"
 		tools:context=".ui.home.HomeActivity">
 		
 		<com.google.android.material.tabs.TabLayout
 			android:id="@+id/tl_coin_list"
 			android:layout_width="match_parent"
 			android:layout_height="wrap_content"
+			android:layout_marginTop="8dp"
 			android:background="@color/backgroundWhite"
 			app:layout_constraintEnd_toEndOf="parent"
 			app:layout_constraintStart_toStartOf="parent"
@@ -26,7 +28,8 @@
 			app:tabGravity="fill"
 			app:tabIndicatorColor="@color/backgroundPrimary"
 			app:tabMode="fixed"
-			app:tabSelectedTextColor="@color/textPrimary"
+			app:tabSelectedTextColor="@color/textBlack"
+			app:tabTextAppearance="@style/TabTextAppearance"
 			app:tabTextColor="@color/textLight" />
 		
 		<androidx.viewpager.widget.ViewPager

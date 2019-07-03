@@ -31,7 +31,7 @@
 				<LinearLayout
 					android:id="@+id/ll_search"
 					android:layout_width="match_parent"
-					android:layout_height="wrap_content"
+					android:layout_height="48dp"
 					android:layout_margin="4dp"
 					android:background="@color/backgroundWhite"
 					android:orientation="horizontal"
@@ -42,7 +42,7 @@
 					<EditText
 						android:id="@+id/et_search_keyword"
 						android:layout_width="0dp"
-						android:layout_height="48dp"
+						android:layout_height="match_parent"
 						android:layout_weight="0.8"
 						android:background="@color/transparent"
 						android:hint="@string/hint_search_keyword"
@@ -57,14 +57,15 @@
 					<ImageView
 						android:id="@+id/iv_search"
 						android:layout_width="0dp"
-						android:layout_height="48dp"
+						android:layout_height="match_parent"
 						android:layout_weight="0.2"
 						android:gravity="center"
 						android:onClick="@{() -> vm.loadImages()}"
 						android:padding="8dp"
 						android:src="@drawable/vector_search"
 						android:text="@string/hint_search_keyword"
-						android:textSize="14sp" />
+						android:textSize="14sp"
+						android:tint="@color/textBlack" />
 				</LinearLayout>
 			
 			</com.google.android.material.appbar.CollapsingToolbarLayout>
@@ -92,11 +93,11 @@
 				android:layout_width="wrap_content"
 				android:layout_height="wrap_content"
 				android:visibility="invisible"
-				app:layout_constraintStart_toStartOf="parent"
+				app:layout_constraintBottom_toBottomOf="parent"
 				app:layout_constraintEnd_toEndOf="parent"
-				app:layout_constraintTop_toTopOf="parent"
-				app:layout_constraintBottom_toBottomOf="parent"/>
-			
+				app:layout_constraintStart_toStartOf="parent"
+				app:layout_constraintTop_toTopOf="parent" />
+		
 		</androidx.constraintlayout.widget.ConstraintLayout>
 	
 	</androidx.coordinatorlayout.widget.CoordinatorLayout>

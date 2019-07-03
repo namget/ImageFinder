@@ -1,6 +1,7 @@
 package com.example.imagefinder.ui.base;
 
 import android.os.Bundle;
+import android.view.View;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
@@ -25,6 +26,8 @@ public abstract class BaseActivity<B extends ViewDataBinding> extends AppCompatA
         super.onCreate(savedInstanceState);
         binding = DataBindingUtil.setContentView(this, layoutId);
         binding.setLifecycleOwner(this);
+
+        getWindow().getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR);
     }
 
     protected <VM extends ViewModel> VM getViewModel(@NonNull Class<VM> vmClass) {
