@@ -3,4 +3,6 @@
 	
 	<string name="hint_search_keyword">검색하세요.</string>
 	<string name="button_search">검색</string>
+	
+	<string name="store_button">보관함에 저장</string>
 </resources>

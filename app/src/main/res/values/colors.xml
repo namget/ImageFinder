@@ -11,6 +11,7 @@
 	<color name="backgroundDark">@color/colorGray700</color>
 	<color name="backgroundPrimary">@color/primary</color>
 	<color name="backgroundPrimaryDark">@color/primaryDark</color>
+	<color name="backgroundBlackTransparent">@color/colorBlackTransparent</color>
 	
 	<color name="textLight">@color/colorGray500</color>
 	<color name="textDark">@color/colorBlueGray900</color>
@@ -22,6 +23,7 @@
 	<!--palette-->
 	<color name="colorWhite">#FFFFFF</color>
 	<color name="colorBlack">#000000</color>
+	<color name="colorBlackTransparent">#AA000000</color>
 	
 	<color name="colorGray100">#F5F5F5</color>
 	<color name="colorGray300">#E0E0E0</color>

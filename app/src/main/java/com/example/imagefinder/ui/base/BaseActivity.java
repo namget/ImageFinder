@@ -10,7 +10,7 @@ import androidx.lifecycle.ViewModel;
 import androidx.lifecycle.ViewModelProviders;
 import com.example.imagefinder.ui.ViewModelFactory;
 
-abstract public class BaseActivity<B extends ViewDataBinding> extends AppCompatActivity {
+public abstract class BaseActivity<B extends ViewDataBinding> extends AppCompatActivity {
 
     private final int layoutId;
 

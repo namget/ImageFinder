@@ -11,6 +11,7 @@ import com.example.imagefinder.adapter.ThumbnailPagedListAdapter;
 import com.example.imagefinder.data.model.Thumbnail;
 import com.example.imagefinder.databinding.FragmnetSearchImageBinding;
 import com.example.imagefinder.ui.base.BaseFragment;
+import com.example.imagefinder.ui.detail.DetailDialogFragment;
 
 import static com.example.imagefinder.commons.Constants.GRID_SPAN_COUNT;
 
@@ -32,7 +33,7 @@ public class SearchImageFragment extends BaseFragment<FragmnetSearchImageBinding
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        searchImageViewModel = getActivityScopeViewModel(SearchImageViewModel.class);
+        searchImageViewModel = getFragmentScopeViewModel(SearchImageViewModel.class);
 
         getBinding().setVm(searchImageViewModel);
 
@@ -50,9 +51,8 @@ public class SearchImageFragment extends BaseFragment<FragmnetSearchImageBinding
     private void setupRecyclerView() {
         getBinding().rvSearchedImage.setAdapter(
                 new ThumbnailPagedListAdapter((item, position) -> {
-                    if (searchImageViewModel != null) {
-                        searchImageViewModel.storeImages(item);
-                    }
+                    DetailDialogFragment detailDialogFragment = DetailDialogFragment.newInstance(item);
+                    detailDialogFragment.ifNotAddedShow(requireFragmentManager());
                 })
         );
 

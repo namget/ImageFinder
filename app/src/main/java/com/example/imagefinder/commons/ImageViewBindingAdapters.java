@@ -9,6 +9,19 @@ import com.example.imagefinder.utils.TextUtils;
 
 public class ImageViewBindingAdapters {
 
+    @BindingAdapter("srcCenterCrop")
+    public static void setImageByUriCenterCrop(
+            @NonNull ImageView imageView,
+            @Nullable String uri
+    ) {
+        if (TextUtils.isNotEmpty(uri)) {
+            Glide.with(imageView)
+                    .load(uri)
+                    .centerCrop()
+                    .into(imageView);
+        }
+    }
+
     @BindingAdapter("src")
     public static void setImageByUri(
             @NonNull ImageView imageView,
@@ -17,7 +30,6 @@ public class ImageViewBindingAdapters {
         if (TextUtils.isNotEmpty(uri)) {
             Glide.with(imageView)
                     .load(uri)
-                    .centerCrop()
                     .into(imageView);
         }
     }

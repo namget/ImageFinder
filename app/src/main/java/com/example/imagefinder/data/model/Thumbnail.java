@@ -1,5 +1,7 @@
 package com.example.imagefinder.data.model;
 
+import android.os.Parcel;
+import android.os.Parcelable;
 import androidx.annotation.NonNull;
 import com.example.imagefinder.data.remote.response.ImageResponse;
 import com.example.imagefinder.data.remote.response.VideoResponse;
@@ -9,7 +11,7 @@ import com.example.imagefinder.utils.DateUtils;
 import java.util.*;
 
 @SuppressWarnings({"unused", "WeakerAccess"})
-public class Thumbnail {
+public class Thumbnail implements Parcelable {
 
     @NonNull
     private final String imageUri;
@@ -121,4 +123,37 @@ public class Thumbnail {
                 ", source=" + source +
                 '}';
     }
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeString(this.imageUri);
+        dest.writeLong(this.dateTime.getTime());
+        dest.writeString(this.content);
+        dest.writeInt(this.source.ordinal());
+    }
+
+    protected Thumbnail(Parcel in) {
+        this.imageUri = Objects.requireNonNull(in.readString());
+        this.dateTime = new Date(in.readLong());
+        this.content = Objects.requireNonNull(in.readString());
+        int tmpSource = in.readInt();
+        this.source = ThumbnailSource.values()[in.readInt()];
+    }
+
+    public static final Creator<Thumbnail> CREATOR = new Creator<Thumbnail>() {
+        @Override
+        public Thumbnail createFromParcel(Parcel source) {
+            return new Thumbnail(source);
+        }
+
+        @Override
+        public Thumbnail[] newArray(int size) {
+            return new Thumbnail[size];
+        }
+    };
 }

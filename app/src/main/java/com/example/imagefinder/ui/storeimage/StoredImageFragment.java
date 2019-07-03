@@ -8,6 +8,7 @@ import com.example.imagefinder.R;
 import com.example.imagefinder.adapter.ThumbnailAdapter;
 import com.example.imagefinder.databinding.FragmnetStoredImageBinding;
 import com.example.imagefinder.ui.base.BaseFragment;
+import com.example.imagefinder.ui.detail.DetailViewModel;
 import com.example.imagefinder.ui.searchimage.SearchImageViewModel;
 
 public class StoredImageFragment extends BaseFragment<FragmnetStoredImageBinding> {
@@ -16,7 +17,7 @@ public class StoredImageFragment extends BaseFragment<FragmnetStoredImageBinding
     private StoredImageViewModel storedImageViewModel;
 
     @Nullable
-    private SearchImageViewModel searchImageViewModel;
+    private DetailViewModel detailViewModel;
 
     public StoredImageFragment() {
         super(R.layout.fragmnet_stored_image);
@@ -32,7 +33,7 @@ public class StoredImageFragment extends BaseFragment<FragmnetStoredImageBinding
         super.onViewCreated(view, savedInstanceState);
 
         storedImageViewModel = getFragmentScopeViewModel(StoredImageViewModel.class);
-        searchImageViewModel = getActivityScopeViewModel(SearchImageViewModel.class);
+        detailViewModel = getActivityScopeViewModel(DetailViewModel.class);
 
         getBinding().setVm(storedImageViewModel);
 
@@ -54,8 +55,8 @@ public class StoredImageFragment extends BaseFragment<FragmnetStoredImageBinding
     }
 
     private void registerEvent() {
-        if (searchImageViewModel != null && storedImageViewModel != null) {
-            searchImageViewModel.getIsLocalDataUpdate().observe(this, t ->
+        if (detailViewModel != null && storedImageViewModel != null) {
+            detailViewModel.getIsLocalDataUpdate().observe(this, t ->
                     storedImageViewModel.updateImages());
         }
     }

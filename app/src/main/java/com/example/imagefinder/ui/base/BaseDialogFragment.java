@@ -8,18 +8,23 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.databinding.DataBindingUtil;
 import androidx.databinding.ViewDataBinding;
+import androidx.fragment.app.DialogFragment;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
 import androidx.lifecycle.ViewModel;
 import androidx.lifecycle.ViewModelProviders;
 import com.example.imagefinder.ui.ViewModelFactory;
 
-public abstract class BaseFragment<B extends ViewDataBinding> extends Fragment {
+public abstract class BaseDialogFragment<B extends ViewDataBinding> extends DialogFragment {
+
+    @NonNull
+    private final String TAG = getClass().getSimpleName();
 
     private final int layoutId;
 
     private B binding;
 
-    public BaseFragment(int layoutId) {
+    public BaseDialogFragment(int layoutId) {
         this.layoutId = layoutId;
     }
 
@@ -27,13 +32,19 @@ public abstract class BaseFragment<B extends ViewDataBinding> extends Fragment {
         return binding;
     }
 
+    public void ifNotAddedShow(@NonNull FragmentManager fragmentManager) {
+        Fragment fragment = fragmentManager.findFragmentByTag(TAG);
+
+        if (fragment == null) {
+            show(fragmentManager, TAG);
+        }
+    }
+
     @Nullable
     @Override
-    public View onCreateView(
-            @NonNull LayoutInflater inflater,
-            @Nullable ViewGroup container,
-            @Nullable Bundle savedInstanceState
-    ) {
+    public View onCreateView(@NonNull LayoutInflater inflater,
+                             @Nullable ViewGroup container,
+                             @Nullable Bundle savedInstanceState) {
         binding = DataBindingUtil.inflate(inflater, layoutId, container, false);
         binding.setLifecycleOwner(this);
         return binding.getRoot();
