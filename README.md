@@ -10,8 +10,18 @@
 
 
 ## 사용 기술 및 라이브러리
-* Retrofit + RxAndroid
-* AAC LifeCycle
-* AAC Paging
-* Glide
-* DataBinding
+* [DataBinding][databinding]
+* [AAC ViewModel][viewmodel]
+* [AAC LiveData][livedata]
+* [AAC Paging][paging]
+* [Retrofit][retrofit] + [RxJava][rxjava]
+* [Glide][glide]
+
+
+[databinding]: https://developer.android.com/topic/libraries/data-binding
+[viewmodel]: https://developer.android.com/topic/libraries/architecture/viewmodel
+[livedata]: https://developer.android.com/topic/libraries/architecture/livedata
+[paging]: https://developer.android.com/topic/libraries/architecture/paging
+[retrofit]: http://square.github.io/retrofit
+[rxjava]: https://github.com/ReactiveX/RxJava
+[glide]: https://github.com/bumptech/glide
