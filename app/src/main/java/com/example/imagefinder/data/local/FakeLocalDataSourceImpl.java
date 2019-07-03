@@ -2,19 +2,20 @@ package com.example.imagefinder.data.local;
 
 import androidx.annotation.NonNull;
 import com.example.imagefinder.data.model.Thumbnail;
-import com.example.imagefinder.utils.TextUtils;
 import io.reactivex.Completable;
 import io.reactivex.Observable;
 import io.reactivex.Single;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class FakeLocalDataSourceImpl implements LocalDataSource {
 
     private static LocalDataSource INSTANCE;
 
-    private final List<Thumbnail> tmpStoredThumbnail = new ArrayList<>();
+    private final Map<String, Thumbnail> tmpStoredThumbnail = new HashMap<>();
 
     public static LocalDataSource getInstance() {
         if (INSTANCE == null) {
@@ -29,17 +30,22 @@ public class FakeLocalDataSourceImpl implements LocalDataSource {
 
         return Completable.fromSingle(
                 Observable.just(thumbnail)
-                        .filter(this::isStored)
-                        .firstOrError()
                         .map(Thumbnail::stateChangeToLocalData)
-                        .map(tmpStoredThumbnail::add)
+                        .filter(value -> !(tmpStoredThumbnail.containsKey(value.getImageUri())))
+                        .firstOrError()
+                        .map(value -> {
+                            tmpStoredThumbnail.put(value.getImageUri(), value);
+                            return tmpStoredThumbnail.get(value.getImageUri());
+                        })
         );
     }
 
     @NonNull
     @Override
     public Single<List<Thumbnail>> loadStoredThumbnails() {
-        return Single.just(tmpStoredThumbnail);
+        return Single.just(tmpStoredThumbnail)
+                .map(Map::values)
+                .map(ArrayList::new);
     }
 
     @NonNull
@@ -47,18 +53,11 @@ public class FakeLocalDataSourceImpl implements LocalDataSource {
     public Completable deleteStoredThumbnail(@NonNull Thumbnail thumbnail) {
 
         return Completable.fromSingle(
-                Observable.just(tmpStoredThumbnail)
-                        .filter(t -> t.remove(thumbnail))
+                Observable.just(thumbnail)
+                        .map(Thumbnail::getImageUri)
+                        .filter(tmpStoredThumbnail::containsKey)
                         .firstOrError()
+                        .map(tmpStoredThumbnail::remove)
         );
-    }
-
-    private boolean isStored(Thumbnail thumbnail) {
-        for (Thumbnail stored : tmpStoredThumbnail) {
-            if (TextUtils.isEquals(stored.getImageUri(), thumbnail.getImageUri())) {
-                return false;
-            }
-        }
-        return true;
     }
 }
