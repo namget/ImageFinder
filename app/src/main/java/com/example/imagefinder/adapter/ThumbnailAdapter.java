@@ -17,7 +17,11 @@ public class ThumbnailAdapter extends RecyclerView.Adapter<ThumbnailViewHolder> 
     private final List<Thumbnail> item = new ArrayList<>();
 
     @Nullable
-    private OnStoreButtonClickListener onStoreButtonClickListener;
+    private OnItemClickListener onItemClickListener;
+
+    public ThumbnailAdapter(@Nullable OnItemClickListener onItemClickListener) {
+        this.onItemClickListener = onItemClickListener;
+    }
 
     @NonNull
     @Override
@@ -31,6 +35,13 @@ public class ThumbnailAdapter extends RecyclerView.Adapter<ThumbnailViewHolder> 
     public void onBindViewHolder(@NonNull ThumbnailViewHolder holder, int position) {
         holder.getBinding().setThumbnail(item.get(position));
         holder.getBinding().executePendingBindings();
+
+        holder.getBinding().getRoot().setOnClickListener(__ -> {
+                    if (onItemClickListener != null) {
+                        onItemClickListener.onItemClickListener(item.get(position), position);
+                    }
+                }
+        );
     }
 
     @Override
@@ -43,11 +54,11 @@ public class ThumbnailAdapter extends RecyclerView.Adapter<ThumbnailViewHolder> 
         this.item.addAll(item);
     }
 
-    public void setOnStoreButtonClickListener(@NonNull OnStoreButtonClickListener onStoreButtonClickListener) {
-        this.onStoreButtonClickListener = onStoreButtonClickListener;
+    public void setOnStoreButtonClickListener(@NonNull OnItemClickListener onItemClickListener) {
+        this.onItemClickListener = onItemClickListener;
     }
 
-    public interface OnStoreButtonClickListener {
-        void onStoreButtonClick(Thumbnail thumbnail, int position);
+    public interface OnItemClickListener {
+        void onItemClickListener(Thumbnail thumbnail, int position);
     }
 }

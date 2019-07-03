@@ -61,4 +61,21 @@ public class DetailViewModel extends BaseViewModel {
             );
         }
     }
+
+    void deleteImages() {
+        if (thumbnail.getValue() != null) {
+            addDisposable(localDataSource.deleteStoredThumbnail(thumbnail.getValue())
+                    .observeOn(AndroidSchedulers.mainThread())
+                    .subscribe(() -> {
+                                isLocalDataUpdate.setValue(true);
+                                isUpdateSuccess.setValue(true);
+                            },
+                            error -> {
+                                isUpdateSuccess.setValue(false);
+                                error.printStackTrace();
+                            }
+                    )
+            );
+        }
+    }
 }

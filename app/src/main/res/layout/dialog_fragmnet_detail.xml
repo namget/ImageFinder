@@ -4,6 +4,8 @@
 	
 	<data>
 		
+		<import type="com.example.imagefinder.enums.DataState" />
+		
 		<variable
 			name="vm"
 			type="com.example.imagefinder.ui.detail.DetailViewModel" />
@@ -18,7 +20,7 @@
 			android:id="@+id/ll_header"
 			android:layout_width="match_parent"
 			android:layout_height="0dp"
-			android:background="@color/primary"
+			android:background="@color/backgroundPrimary"
 			android:gravity="center_vertical"
 			app:layout_constraintBottom_toTopOf="@id/iv_detail_thumbnail"
 			app:layout_constraintEnd_toEndOf="parent"
@@ -49,13 +51,14 @@
 				android:textStyle="bold" />
 			
 			<TextView
-				android:id="@+id/tv_store_button"
+				android:id="@+id/tv_action"
 				android:layout_width="0dp"
 				android:layout_height="match_parent"
 				android:layout_weight="0.3"
 				android:gravity="center"
-				android:text="@string/store_button"
-				android:textColor="@color/textBlack" />
+				android:text='@{vm.thumbnail.getDataState() == DataState.CACHED ? @string/store : @string/delete}'
+				android:textColor="@color/textBlack"
+				android:textSize="12sp" />
 		</LinearLayout>
 		
 		<ImageView

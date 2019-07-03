@@ -34,12 +34,4 @@ public class StoredImageViewModel extends BaseViewModel {
                 )
         );
     }
-
-    void deleteImages(int position) {
-        addDisposable(localDataSource.deleteStoredThumbnail(position)
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(storedImages::setValue,
-                        Throwable::printStackTrace)
-        );
-    }
 }

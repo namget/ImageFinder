@@ -4,11 +4,15 @@ import android.os.Bundle;
 import android.view.View;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.recyclerview.widget.GridLayoutManager;
 import com.example.imagefinder.R;
 import com.example.imagefinder.adapter.ThumbnailAdapter;
 import com.example.imagefinder.databinding.FragmnetStoredImageBinding;
 import com.example.imagefinder.ui.base.BaseFragment;
+import com.example.imagefinder.ui.detail.DetailDialogFragment;
 import com.example.imagefinder.ui.detail.DetailViewModel;
+
+import static com.example.imagefinder.commons.Constants.GRID_SPAN_COUNT;
 
 public class StoredImageFragment extends BaseFragment<FragmnetStoredImageBinding> {
 
@@ -42,15 +46,14 @@ public class StoredImageFragment extends BaseFragment<FragmnetStoredImageBinding
     }
 
     private void setupRecyclerView() {
-        getBinding().rvStoredImage.setAdapter(new ThumbnailAdapter());
+        getBinding().rvStoredImage.setAdapter(
+                new ThumbnailAdapter((item, position) -> {
+                    DetailDialogFragment detailDialogFragment = DetailDialogFragment.newInstance(item);
+                    detailDialogFragment.ifNotAddedShow(requireFragmentManager());
+                })
+        );
 
-        ThumbnailAdapter adapter = (ThumbnailAdapter) getBinding().rvStoredImage.getAdapter();
-
-        if (adapter != null && storedImageViewModel != null) {
-            adapter.setOnStoreButtonClickListener((item, position) ->
-                    storedImageViewModel.deleteImages(position)
-            );
-        }
+        getBinding().rvStoredImage.setLayoutManager(new GridLayoutManager(getContext(), GRID_SPAN_COUNT));
     }
 
     private void registerEvent() {

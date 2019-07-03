@@ -31,6 +31,7 @@ public class FakeLocalDataSourceImpl implements LocalDataSource {
                 Observable.just(thumbnail)
                         .filter(this::isStored)
                         .firstOrError()
+                        .map(Thumbnail::stateChangeToLocalData)
                         .map(tmpStoredThumbnail::add)
         );
     }
@@ -43,13 +44,13 @@ public class FakeLocalDataSourceImpl implements LocalDataSource {
 
     @NonNull
     @Override
-    public Single<List<Thumbnail>> deleteStoredThumbnail(int position) {
+    public Completable deleteStoredThumbnail(@NonNull Thumbnail thumbnail) {
 
-        return Single.just(tmpStoredThumbnail)
-                .map(t -> {
-                    t.remove(position);
-                    return t;
-                });
+        return Completable.fromSingle(
+                Observable.just(tmpStoredThumbnail)
+                        .filter(t -> t.remove(thumbnail))
+                        .firstOrError()
+        );
     }
 
     private boolean isStored(Thumbnail thumbnail) {

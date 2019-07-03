@@ -10,6 +10,7 @@ import androidx.fragment.app.DialogFragment;
 import com.example.imagefinder.R;
 import com.example.imagefinder.data.model.Thumbnail;
 import com.example.imagefinder.databinding.DialogFragmnetDetailBinding;
+import com.example.imagefinder.enums.DataState;
 import com.example.imagefinder.ui.base.BaseDialogFragment;
 import com.google.android.material.snackbar.Snackbar;
 
@@ -23,6 +24,7 @@ public class DetailDialogFragment extends BaseDialogFragment<DialogFragmnetDetai
     private Thumbnail thumbnail;
     @Nullable
     private DetailViewModel detailViewModel;
+
     public DetailDialogFragment() {
         super(R.layout.dialog_fragmnet_detail);
     }
@@ -76,9 +78,12 @@ public class DetailDialogFragment extends BaseDialogFragment<DialogFragmnetDetai
 
     private void registerEvent() {
         if (detailViewModel != null) {
-            getBinding().tvStoreButton.setOnClickListener(__ -> detailViewModel.storeImages());
 
-            detailViewModel.getIsUpdateSuccess().observe(this, isUpdate -> {
+            if (thumbnail != null) {
+                if (thumbnail.getDataState() == DataState.CACHED) {
+                    getBinding().tvAction.setOnClickListener(__ -> detailViewModel.storeImages());
+
+                    detailViewModel.getIsUpdateSuccess().observe(this, isUpdate -> {
                         if (isUpdate) {
                             Snackbar.make(
                                     getBinding().getRoot(),
@@ -90,8 +95,16 @@ public class DetailDialogFragment extends BaseDialogFragment<DialogFragmnetDetai
                                     getString(R.string.db_insert_fail_message),
                                     Snackbar.LENGTH_SHORT).show();
                         }
-                    }
-            );
+                    });
+                } else if (thumbnail.getDataState() == DataState.LOCAL_STORED) {
+                    getBinding().tvAction.setOnClickListener(__ -> detailViewModel.deleteImages());
+                    detailViewModel.getIsUpdateSuccess().observe(this, isUpdate -> {
+                        if (isUpdate) {
+                            dismiss();
+                        }
+                    });
+                }
+            }
         }
 
         getBinding().ivBackButton.setOnClickListener(__ -> dismiss());

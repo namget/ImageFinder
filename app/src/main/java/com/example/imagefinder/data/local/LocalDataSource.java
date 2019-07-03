@@ -16,5 +16,5 @@ public interface LocalDataSource {
     Single<List<Thumbnail>> loadStoredThumbnails();
 
     @NonNull
-    Single<List<Thumbnail>> deleteStoredThumbnail(int position);
+    Completable deleteStoredThumbnail(@NonNull Thumbnail thumbnail);
 }

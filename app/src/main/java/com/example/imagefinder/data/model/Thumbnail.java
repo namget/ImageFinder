@@ -5,6 +5,7 @@ import android.os.Parcelable;
 import androidx.annotation.NonNull;
 import com.example.imagefinder.data.remote.response.ImageResponse;
 import com.example.imagefinder.data.remote.response.VideoResponse;
+import com.example.imagefinder.enums.DataState;
 import com.example.imagefinder.enums.ThumbnailSource;
 import com.example.imagefinder.utils.DateUtils;
 
@@ -32,25 +33,40 @@ public class Thumbnail implements Parcelable {
     private final String content;
     @NonNull
     private final ThumbnailSource source;
+    @NonNull
+    private final DataState dataState;
 
     private Thumbnail(
             @NonNull String imageUri,
             @NonNull Date dateTime,
             @NonNull String content,
-            @NonNull ThumbnailSource source
+            @NonNull ThumbnailSource source,
+            @NonNull DataState dataState
     ) {
         this.imageUri = imageUri;
         this.dateTime = dateTime;
         this.content = content;
         this.source = source;
+        this.dataState = dataState;
     }
 
     protected Thumbnail(Parcel in) {
         this.imageUri = Objects.requireNonNull(in.readString());
         this.dateTime = new Date(in.readLong());
         this.content = Objects.requireNonNull(in.readString());
-        int tmpSource = in.readInt();
         this.source = ThumbnailSource.values()[in.readInt()];
+        this.dataState = DataState.values()[in.readInt()];
+    }
+
+    @NonNull
+    public static Thumbnail stateChangeToLocalData(Thumbnail thumbnail) {
+        return new Thumbnail(
+                thumbnail.getImageUri(),
+                thumbnail.getDateTime(),
+                thumbnail.getContent(),
+                thumbnail.getSource(),
+                DataState.LOCAL_STORED
+        );
     }
 
     @NonNull
@@ -58,7 +74,8 @@ public class Thumbnail implements Parcelable {
         return new Thumbnail(document.getThumbnailUrl(),
                 DateUtils.parseKakaoDateToDate(document.getDatetime()),
                 document.getCollection() + ": " + document.getDisplaySitename(),
-                ThumbnailSource.IMAGE_THUMBNAIL);
+                ThumbnailSource.IMAGE_THUMBNAIL,
+                DataState.CACHED);
     }
 
     @NonNull
@@ -66,7 +83,8 @@ public class Thumbnail implements Parcelable {
         return new Thumbnail(document.getThumbnail(),
                 DateUtils.parseKakaoDateToDate(document.getDatetime()),
                 document.getAuthor() + ", " + document.getTitle(),
-                ThumbnailSource.VIDEO_THUMBNAIL);
+                ThumbnailSource.VIDEO_THUMBNAIL,
+                DataState.CACHED);
     }
 
     @NonNull
@@ -113,6 +131,11 @@ public class Thumbnail implements Parcelable {
         return source;
     }
 
+    @NonNull
+    public DataState getDataState() {
+        return dataState;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -121,12 +144,18 @@ public class Thumbnail implements Parcelable {
         return imageUri.equals(thumbnail.imageUri) &&
                 dateTime.equals(thumbnail.dateTime) &&
                 content.equals(thumbnail.content) &&
-                source == thumbnail.source;
+                source == thumbnail.source &&
+                dataState == thumbnail.dataState;
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(imageUri, dateTime, content, source);
+        return Objects.hash(imageUri, dateTime, content, source, dataState);
+    }
+
+    @Override
+    public int describeContents() {
+        return 0;
     }
 
     @NonNull
@@ -137,12 +166,8 @@ public class Thumbnail implements Parcelable {
                 ", dateTime=" + dateTime +
                 ", content='" + content + '\'' +
                 ", source=" + source +
+                ", dataState=" + dataState +
                 '}';
-    }
-
-    @Override
-    public int describeContents() {
-        return 0;
     }
 
     @Override
@@ -151,5 +176,6 @@ public class Thumbnail implements Parcelable {
         dest.writeLong(this.dateTime.getTime());
         dest.writeString(this.content);
         dest.writeInt(this.source.ordinal());
+        dest.writeInt(this.dataState.ordinal());
     }
 }
