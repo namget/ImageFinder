@@ -49,12 +49,12 @@ public class SearchImageViewModel extends BaseViewModel {
     }
 
     @NonNull
-    public LiveData<Boolean> getIsLoading() {
+    LiveData<Boolean> getIsLoading() {
         return isLoading;
     }
 
     @NonNull
-    public LiveData<Boolean> getIsError() {
+    LiveData<Boolean> getIsError() {
         return isError;
     }
 

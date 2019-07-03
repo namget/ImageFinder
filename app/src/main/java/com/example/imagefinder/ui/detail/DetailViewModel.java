@@ -17,6 +17,8 @@ public class DetailViewModel extends BaseViewModel {
     private final MutableLiveData<Thumbnail> thumbnail = new MutableLiveData<>();
     @NonNull
     private final SingleLiveEvent<Boolean> isLocalDataUpdate = new SingleLiveEvent<>();
+    @NonNull
+    private final SingleLiveEvent<Boolean> isUpdateSuccess = new SingleLiveEvent<>();
 
     public DetailViewModel(
             @NonNull LocalDataSource localDataSource
@@ -29,22 +31,30 @@ public class DetailViewModel extends BaseViewModel {
     }
 
     @NonNull
+    public LiveData<Thumbnail> getThumbnail() {
+        return thumbnail;
+    }
+
+    @NonNull
     public LiveData<Boolean> getIsLocalDataUpdate() {
         return isLocalDataUpdate;
     }
 
     @NonNull
-    public LiveData<Thumbnail> getThumbnail() {
-        return thumbnail;
+    public LiveData<Boolean> getIsUpdateSuccess() {
+        return isUpdateSuccess;
     }
 
     void storeImages() {
         if (thumbnail.getValue() != null) {
             addDisposable(localDataSource.insertThumbnail(thumbnail.getValue())
                     .observeOn(AndroidSchedulers.mainThread())
-                    .subscribe(() -> isLocalDataUpdate.setValue(true),
+                    .subscribe(() -> {
+                                isLocalDataUpdate.setValue(true);
+                                isUpdateSuccess.setValue(true);
+                            },
                             error -> {
-                                isLocalDataUpdate.setValue(false);
+                                isUpdateSuccess.setValue(false);
                                 error.printStackTrace();
                             }
                     )

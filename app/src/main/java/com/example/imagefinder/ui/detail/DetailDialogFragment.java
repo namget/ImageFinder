@@ -9,6 +9,7 @@ import com.example.imagefinder.R;
 import com.example.imagefinder.data.model.Thumbnail;
 import com.example.imagefinder.databinding.DialogFragmnetDetailBinding;
 import com.example.imagefinder.ui.base.BaseDialogFragment;
+import com.google.android.material.snackbar.Snackbar;
 
 import java.util.Objects;
 
@@ -63,6 +64,21 @@ public class DetailDialogFragment extends BaseDialogFragment<DialogFragmnetDetai
     private void registerEvent() {
         if (detailViewModel != null) {
             getBinding().tvStoreButton.setOnClickListener(__ -> detailViewModel.storeImages());
+
+            detailViewModel.getIsUpdateSuccess().observe(this, isUpdate -> {
+                        if (isUpdate) {
+                            Snackbar.make(
+                                    getBinding().getRoot(),
+                                    getString(R.string.db_insert_success_message),
+                                    Snackbar.LENGTH_SHORT).show();
+                        } else {
+                            Snackbar.make(
+                                    getBinding().getRoot(),
+                                    getString(R.string.db_insert_fail_message),
+                                    Snackbar.LENGTH_SHORT).show();
+                        }
+                    }
+            );
         }
 
         getBinding().ivBackButton.setOnClickListener(__ -> dismiss());

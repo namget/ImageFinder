@@ -9,7 +9,6 @@ import com.example.imagefinder.adapter.ThumbnailAdapter;
 import com.example.imagefinder.databinding.FragmnetStoredImageBinding;
 import com.example.imagefinder.ui.base.BaseFragment;
 import com.example.imagefinder.ui.detail.DetailViewModel;
-import com.example.imagefinder.ui.searchimage.SearchImageViewModel;
 
 public class StoredImageFragment extends BaseFragment<FragmnetStoredImageBinding> {
 
@@ -56,8 +55,9 @@ public class StoredImageFragment extends BaseFragment<FragmnetStoredImageBinding
 
     private void registerEvent() {
         if (detailViewModel != null && storedImageViewModel != null) {
-            detailViewModel.getIsLocalDataUpdate().observe(this, t ->
-                    storedImageViewModel.updateImages());
+            detailViewModel.getIsLocalDataUpdate().observe(this, isUpdate ->
+                    storedImageViewModel.updateImages()
+            );
         }
     }
 }

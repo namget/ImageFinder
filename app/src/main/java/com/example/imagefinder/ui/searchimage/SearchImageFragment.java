@@ -12,6 +12,7 @@ import com.example.imagefinder.data.model.Thumbnail;
 import com.example.imagefinder.databinding.FragmnetSearchImageBinding;
 import com.example.imagefinder.ui.base.BaseFragment;
 import com.example.imagefinder.ui.detail.DetailDialogFragment;
+import com.google.android.material.snackbar.Snackbar;
 
 import static com.example.imagefinder.commons.Constants.GRID_SPAN_COUNT;
 
@@ -53,6 +54,13 @@ public class SearchImageFragment extends BaseFragment<FragmnetSearchImageBinding
                             getBinding().pgSearchImage.setVisibility(View.INVISIBLE);
                         }
                     }
+            );
+
+            searchImageViewModel.getIsError().observe(this, isError ->
+                    Snackbar.make(
+                            getBinding().getRoot(),
+                            getString(R.string.network_fail_message),
+                            Snackbar.LENGTH_SHORT).show()
             );
         }
     }
