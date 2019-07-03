@@ -12,6 +12,9 @@ public class DateUtils {
     private static final SimpleDateFormat kakaoDateFormat =
             new SimpleDateFormat("yyyy-MM-dd'T'kk:mm:ss.SSSz", Locale.KOREA);
 
+    private static final SimpleDateFormat yearMonthDayOrderFormat =
+            new SimpleDateFormat("yy.MM.dd  kk:mm", Locale.KOREA);
+
     private DateUtils() {
     }
 
@@ -25,6 +28,11 @@ public class DateUtils {
             e.printStackTrace();
             throw new IllegalArgumentException("Invalid kakaoDate parameter: " + kakaoDate);
         }
+    }
+
+    @NonNull
+    public static String formatToYearMonthDay(@NonNull Date date) {
+        return yearMonthDayOrderFormat.format(date);
     }
 
 }

@@ -75,11 +75,11 @@
 		
 		<TextView
 			android:id="@+id/tv_date_time"
+			text="@{vm.thumbnail.getDateTime()}"
 			android:layout_width="match_parent"
 			android:layout_height="0dp"
 			android:gravity="center_vertical"
 			android:padding="8dp"
-			android:text="@{vm.thumbnail.getDateTime().toString()}"
 			android:textColor="@color/backgroundWhite"
 			app:layout_constraintBottom_toTopOf="@id/tv_content"
 			app:layout_constraintEnd_toEndOf="parent"
