@@ -41,7 +41,7 @@ public class DetailViewModel extends BaseViewModel {
     }
 
     @NonNull
-    public LiveData<Boolean> getIsUpdateSuccess() {
+    LiveData<Boolean> getIsUpdateSuccess() {
         return isUpdateSuccess;
     }
 

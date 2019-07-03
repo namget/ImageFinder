@@ -23,7 +23,7 @@
 			
 			<ImageView
 				android:id="@+id/iv_thumbnail"
-				srcCenterCrop="@{thumbnail.imageUri}"
+				uriCenterCrop="@{thumbnail.imageUri}"
 				android:layout_width="150dp"
 				android:layout_height="150dp"
 				app:layout_constraintEnd_toEndOf="parent"

@@ -48,13 +48,13 @@ public class ThumbnailPagedListAdapter extends PagedListAdapter<Thumbnail, Thumb
         holder.getBinding().executePendingBindings();
         holder.getBinding().getRoot().setOnClickListener(__ -> {
                     if (onItemClickListener != null) {
-                        onItemClickListener.onItemClickListener(getItem(position), position);
+                        onItemClickListener.onItemClickListener(getItem(position));
                     }
                 }
         );
     }
 
     public interface OnItemClickListener {
-        void onItemClickListener(Thumbnail thumbnail, int position);
+        void onItemClickListener(Thumbnail thumbnail);
     }
 }

@@ -9,7 +9,7 @@ import com.example.imagefinder.utils.TextUtils;
 
 public class ImageViewBindingAdapters {
 
-    @BindingAdapter("srcCenterCrop")
+    @BindingAdapter("uriCenterCrop")
     public static void setImageByUriCenterCrop(
             @NonNull ImageView imageView,
             @Nullable String uri
@@ -22,7 +22,7 @@ public class ImageViewBindingAdapters {
         }
     }
 
-    @BindingAdapter("src")
+    @BindingAdapter("uri")
     public static void setImageByUri(
             @NonNull ImageView imageView,
             @Nullable String uri

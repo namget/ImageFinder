@@ -38,7 +38,7 @@ public class ThumbnailAdapter extends RecyclerView.Adapter<ThumbnailViewHolder> 
 
         holder.getBinding().getRoot().setOnClickListener(__ -> {
                     if (onItemClickListener != null) {
-                        onItemClickListener.onItemClickListener(item.get(position), position);
+                        onItemClickListener.onItemClickListener(item.get(position));
                     }
                 }
         );
@@ -54,11 +54,7 @@ public class ThumbnailAdapter extends RecyclerView.Adapter<ThumbnailViewHolder> 
         this.item.addAll(item);
     }
 
-    public void setOnStoreButtonClickListener(@NonNull OnItemClickListener onItemClickListener) {
-        this.onItemClickListener = onItemClickListener;
-    }
-
     public interface OnItemClickListener {
-        void onItemClickListener(Thumbnail thumbnail, int position);
+        void onItemClickListener(Thumbnail thumbnail);
     }
 }

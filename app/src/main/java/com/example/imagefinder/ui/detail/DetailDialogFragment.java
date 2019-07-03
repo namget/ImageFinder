@@ -29,7 +29,6 @@ public class DetailDialogFragment extends BaseDialogFragment<DialogFragmnetDetai
         super(R.layout.dialog_fragmnet_detail);
     }
 
-    @SuppressWarnings("WeakerAccess")
     public static DetailDialogFragment newInstance(@NonNull Thumbnail thumbnail) {
         DetailDialogFragment fragment = new DetailDialogFragment();
         Bundle bundle = new Bundle();

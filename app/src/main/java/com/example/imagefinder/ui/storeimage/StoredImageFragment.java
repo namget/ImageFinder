@@ -47,8 +47,8 @@ public class StoredImageFragment extends BaseFragment<FragmnetStoredImageBinding
 
     private void setupRecyclerView() {
         getBinding().rvStoredImage.setAdapter(
-                new ThumbnailAdapter((item, position) -> {
-                    DetailDialogFragment detailDialogFragment = DetailDialogFragment.newInstance(item);
+                new ThumbnailAdapter(thumbnail -> {
+                    DetailDialogFragment detailDialogFragment = DetailDialogFragment.newInstance(thumbnail);
                     detailDialogFragment.ifNotAddedShow(requireFragmentManager());
                 })
         );

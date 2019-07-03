@@ -20,8 +20,10 @@ public class RemoteDataSourceImpl implements RemoteDataSource {
 
     private static RemoteDataSource INSTANCE;
 
+    @NonNull
     private final KakaoApi kakaoApi;
 
+    @NonNull
     private final String key = "KakaoAK 8cec532cb83faad0cae1d3943b48f0ca";
 
     private RemoteDataSourceImpl() {

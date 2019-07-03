@@ -46,7 +46,7 @@ public class ViewPagerAdapter extends FragmentStatePagerAdapter {
             case 0:
                 return "이미지 검색";
             case 1:
-                return "저장한 이미지";
+                return "보관함";
             default:
                 throw new IllegalStateException("Exceed pager count");
         }

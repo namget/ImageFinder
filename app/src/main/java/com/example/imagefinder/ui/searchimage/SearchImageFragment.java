@@ -67,8 +67,8 @@ public class SearchImageFragment extends BaseFragment<FragmnetSearchImageBinding
 
     private void setupRecyclerView() {
         getBinding().rvSearchedImage.setAdapter(
-                new ThumbnailPagedListAdapter((item, position) -> {
-                    DetailDialogFragment detailDialogFragment = DetailDialogFragment.newInstance(item);
+                new ThumbnailPagedListAdapter(thumbnail -> {
+                    DetailDialogFragment detailDialogFragment = DetailDialogFragment.newInstance(thumbnail);
                     detailDialogFragment.ifNotAddedShow(requireFragmentManager());
                 })
         );
