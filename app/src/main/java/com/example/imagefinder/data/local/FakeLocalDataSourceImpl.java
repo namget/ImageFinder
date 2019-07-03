@@ -27,9 +27,10 @@ public class FakeLocalDataSourceImpl implements LocalDataSource {
     @Override
     public Completable insertThumbnail(@NonNull Thumbnail thumbnail) {
 
-        return Completable.fromObservable(
+        return Completable.fromSingle(
                 Observable.just(thumbnail)
                         .filter(this::isStored)
+                        .firstOrError()
                         .map(tmpStoredThumbnail::add)
         );
     }

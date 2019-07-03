@@ -44,7 +44,7 @@ public class ViewModelFactory extends ViewModelProvider.NewInstanceFactory {
         if (modelClass.isAssignableFrom(HomeViewModel.class)) {
             return (T) new HomeViewModel();
         } else if (modelClass.isAssignableFrom(SearchImageViewModel.class)) {
-            return (T) new SearchImageViewModel(remoteDataSource, localDataSource);
+            return (T) new SearchImageViewModel(remoteDataSource);
         } else if (modelClass.isAssignableFrom(StoredImageViewModel.class)) {
             return (T) new StoredImageViewModel(localDataSource);
         } else if (modelClass.isAssignableFrom(DetailViewModel.class)) {

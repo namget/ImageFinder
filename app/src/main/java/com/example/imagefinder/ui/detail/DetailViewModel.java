@@ -43,7 +43,10 @@ public class DetailViewModel extends BaseViewModel {
             addDisposable(localDataSource.insertThumbnail(thumbnail.getValue())
                     .observeOn(AndroidSchedulers.mainThread())
                     .subscribe(() -> isLocalDataUpdate.setValue(true),
-                            Throwable::printStackTrace
+                            error -> {
+                                isLocalDataUpdate.setValue(false);
+                                error.printStackTrace();
+                            }
                     )
             );
         }

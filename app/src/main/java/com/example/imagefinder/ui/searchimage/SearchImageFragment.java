@@ -45,6 +45,15 @@ public class SearchImageFragment extends BaseFragment<FragmnetSearchImageBinding
     private void registerEvent() {
         if (searchImageViewModel != null) {
             searchImageViewModel.pagedListLiveData.observe(this, this::nullCheckSubmitList);
+
+            searchImageViewModel.getIsLoading().observe(this, isLoading -> {
+                        if (isLoading) {
+                            getBinding().pgSearchImage.setVisibility(View.VISIBLE);
+                        } else {
+                            getBinding().pgSearchImage.setVisibility(View.INVISIBLE);
+                        }
+                    }
+            );
         }
     }
 

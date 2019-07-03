@@ -62,7 +62,7 @@ public class DetailDialogFragment extends BaseDialogFragment<DialogFragmnetDetai
 
     private void registerEvent() {
         if (detailViewModel != null) {
-            detailViewModel.storeImages();
+            getBinding().tvStoreButton.setOnClickListener(__ -> detailViewModel.storeImages());
         }
 
         getBinding().ivBackButton.setOnClickListener(__ -> dismiss());
